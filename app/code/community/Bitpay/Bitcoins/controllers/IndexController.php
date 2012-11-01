@@ -1,50 +1,46 @@
 <?
 
+// callback controller
 class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action {
-
-	function debuglog($contents)
-	{
-		file_put_contents('lib/bitpay/log.txt', "\n".date('m-d H:i:s').": ", FILE_APPEND);
-		file_put_contents('lib/bitpay/log.txt', $contents, FILE_APPEND);
-	}
-
-    public function indexAction() {
+	
+	// bitpay's IPN lands here
+	public function indexAction() {		
 		require 'lib/bitpay/bp_lib.php';
 		
 		$apiKey = Mage::getStoreConfig('payment/Bitcoins/api_key');
-		$response = bpVerifyNotification($apiKey);
-		if (is_string($response))
-			$this->debuglog("bitpay callback error: $response");
+		$invoice = bpVerifyNotification($apiKey);
+		
+		if (is_string($invoice))
+			Mage::log("bitpay callback error: $invoice");
 		else {
-			$orderId = $response['posData'];
-			$order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-			$this->debuglog($response['status']);
-
-			switch($response['status'])
-			{
-				case 'paid':
-					$order->setState($order::STATE_PROCESSING, true)->save();
-					break;
-					
+			// get the order
+			if (isset($invoice['posData']['quoteId'])) {
+				$quoteId = $invoice['posData']['quoteId'];
+				$order = Mage::getModel('sales/order')->load($quoteId, 'quote_id');
+			}
+			else {
+				$orderId = $invoice['posData']['orderId'];
+				$order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+			}
+			
+			// save the ipn so that we can find it when the user clicks "Place Order"
+			Mage::getModel('Bitcoins/ipn')->Record($invoice); 		
+			
+			// update the order if it exists already
+			if ($order->getId())
+				switch($invoice['status']) {
 				case 'confirmed':							
 				case 'complete':
-					$invoices = $order->getInvoiceCollection();
-					foreach($invoices as $i)
+					foreach($order->getInvoiceCollection() as $i)
 						$i->pay()
 							->save();
 					$order->setState($order::STATE_PROCESSING, true)
 						->save();
 					break;
-				
-				// (bit-pay.com does not send expired notifications as of this release)
-				case 'expired':			
-					// could set invoices to canceled
-					break;
-
-			}
+				}				
 		}
-		
-    }
+	}
+
 }
 
 

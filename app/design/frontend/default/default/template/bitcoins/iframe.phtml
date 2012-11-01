@@ -1,0 +1,13 @@
+<?php 
+$url = $this->GetIframeUrl();
+switch($url){
+	case 'paid':
+		echo 'Order payment received.  Place Order to complete.'; break;
+	case 'disabled':
+		echo 'Please click Place Order to continue to bitpay.com.'; break;
+	case false:
+		echo 'Error creating invoice.  Please try again or try another payment solution.'; break;
+	default:
+		echo '<iframe src="'.$url.'" width="600" height="150"> </iframe>'; break;
+}
+?>
