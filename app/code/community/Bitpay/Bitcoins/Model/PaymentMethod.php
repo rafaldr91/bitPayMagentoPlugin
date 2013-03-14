@@ -124,8 +124,53 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 			// order status will be PAYMENT_REVIEW instead of PROCESSING
 			$payment->setIsTransactionPending(true); 
 		}
+		else
+		{
+			$this->MarkOrderPaid($payment->getOrder());
+		}
 		
 		return $this;
+	}
+	
+	function MarkOrderPaid($order)
+	{
+		$order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
+		if (!count($order->getInvoiceCollection()))	
+		{
+			$invoice = $order->prepareInvoice()
+				->setTransactionId(1)
+				->addComment('Invoiced automatically by Bitpay/Bitcoins/controllers/IndexController.php')
+				->register()
+				->pay();
+
+			$transactionSave = Mage::getModel('core/resource_transaction')
+				->addObject($invoice)
+				->addObject($invoice->getOrder());
+			$transactionSave->save();
+		}
+	}
+	
+	// given Mage_Core_Model_Abstract, return api-friendly address
+	function ExtractAddress($address)
+	{
+		$options = array();
+		$options['buyerName'] = $address->getName();
+		if ($address->getCompany())
+			$options['buyerName'] = $options['buyerName'].' c/o '.$address->getCompany();
+		$options['buyerAddress1'] = $address->getStreet1();
+		$options['buyerAddress2'] = $address->getStreet2();
+		$options['buyerAddress3'] = $address->getStreet3();
+		$options['buyerAddress4'] = $address->getStreet4();
+		$options['buyerCity'] = $address->getCity();
+		$options['buyerState'] = $address->getRegionCode();
+		$options['buyerZip'] = $address->getPostcode();
+		$options['buyerCountry'] = $address->getCountry();
+		$options['buyerEmail'] = $address->getEmail();
+		$options['buyerPhone'] = $address->getTelephone();
+		// trim to fit API specs
+		foreach(array('buyerName', 'buyerAddress1', 'buyerAddress2', 'buyerAddress3', 'buyerAddress4', 'buyerCity', 'buyerState', 'buyerZip', 'buyerCountry', 'buyerEmail', 'buyerPhone') as $f)
+			$options[$f] = substr($options[$f], 0, 100); 
+		return $options;
 	}
 	
 	function CreateInvoiceAndRedirect($payment, $amount)
@@ -146,6 +191,8 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 			'transactionSpeed' => $speed,
 			'apiKey' => $apiKey,
 			);
+		$options += $this->ExtractAddress($order->getShippingAddress());
+			
 		$invoice = bpCreateInvoice($orderId, $amount, array('orderId' => $orderId), $options);
 
 		$payment->setIsTransactionPending(true); // status will be PAYMENT_REVIEW instead of PROCESSING
