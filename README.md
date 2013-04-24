@@ -19,6 +19,7 @@ Copy these files into your Magento directory.
 
 Configuration
 -------------
+NOTE: SSL is required for use of the BitPay plugin for Magento
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
 2. In Admin panel under "System > Configuration > Sales > Payment Methods > Bitcoins":
 	a. Verify that the module is enabled.
