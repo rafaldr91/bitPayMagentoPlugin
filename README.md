@@ -23,6 +23,7 @@ NOTE: SSL is required for use of the BitPay plugin for Magento
 
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
 2. In Admin panel under "System > Configuration > Sales > Payment Methods > Bitcoins":
+
 	a. Verify that the module is enabled.
 	b. Enter your API key 
 	c. Select a transaction speed.  The high speed will send a confirmation as soon as a transaction is received in the bitcoin network (usually a few seconds).  A medium speed setting will typically take 10 minutes.  The low speed setting usually takes around 1 hour.  See the bitpay.com merchant documentation for a full description of the transaction speed settings.
