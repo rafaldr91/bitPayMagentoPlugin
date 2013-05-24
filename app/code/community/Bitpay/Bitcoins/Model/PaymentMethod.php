@@ -220,5 +220,34 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 			return '';
 	}
 	
+	# computes a unique hash determined by the contents of the cart
+	public function getQuoteHash($quoteId)
+	{
+		$quote = Mage::getModel('sales/quote')->load($quoteId, 'entity_id');
+		if (!$quote)
+		{
+			Mage::log('getQuoteTimestamp: quote not found', NULL, 'bitpay.log');
+			return false;
+		}
+		
+		#encode items
+		$items = $quote->getAllItems();
+		$latest = NULL;
+		$description = '';
+		foreach($items as $i)
+		{
+			$description.= 'i'.$i->getItemId().'q'.$i->getQty();				
+
+			# could encode $i->getOptions() here but item ids are incremented if options are changed
+		}
+		
+		$hash = base64_encode(hash_hmac('sha256', $description, $quoteId));
+		$hash = substr($hash, 0, 30); // fit it in posData maxlen
+		
+		Mage::log("quote $quoteId descr $description hash $hash", NULL, 'bitpay.log');
+		
+		return $hash;
+	}
+	
 }
 ?>
