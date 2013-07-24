@@ -9,7 +9,7 @@ switch($url){
 	case false:
 		echo 'Error creating invoice.  Please try again or try another payment solution.'; break;
 	default:
-		echo '<iframe src="'.$url.'" style="width: 500px; height: 150px; margin-left: 50px"> </iframe>'; break;
+		echo '<iframe src="'.$url.'" style="width:500px; height:150px; overflow:hidden; border:none; margin:auto; display:block;" scrolling="no" allowtransparency="true" frameborder="0"> </iframe>'; break;
 }
 $quoteId = $this->GetQuoteId();
 ?>
