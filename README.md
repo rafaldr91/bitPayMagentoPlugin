@@ -26,7 +26,7 @@ NOTE: SSL is required for use of the BitPay plugin for Magento
 <ol type="a">
  <li>Verify that the module is enabled. 
  <li>Enter your API key.  
- <li>Select a transaction speed.  The high speed will send a confirmation as soon as a transaction is received in the bitcoin network (usually a few seconds).  A medium speed setting will typically take 10 minutes.  The low speed setting usually takes around 1 hour.  See the bitpay.com merchant documentation for a full description of the transaction speed settings. 
+ <li>Select a transaction speed.  The **high** speed will send a confirmation as soon as a transaction is received in the bitcoin network (usually a few seconds).  A **medium** speed setting will typically take 10 minutes.  The **low** speed setting usually takes around 1 hour.  See the bitpay.com merchant documentation for a full description of the transaction speed settings. 
  <li>Verify that the currencies option includes your store's currencies.  If it doesn't, check bitpay.com to see if they support your desired currency.  If so, you may simply add the currency to the list using this setting.  If not, you will not be able to use that currency. 
  <li>(optional) Adjust the "Fullscreen Invoice" setting.  "No" means that payment instructions are embedded in the checkout page.  "Yes" means that the buyer will be redirected to bitpay.com to pay their order. 
 </ol>	
@@ -48,4 +48,4 @@ Version 2
   - Now supports API keys instead of SSL files.  Tested against 1.7.0.2.
  
 Version 3
-  - Now shows an iframe on the checkout page instead of redirecting to bitpay.com.
+  - Now gives the option to show an iframe on the checkout page instead of redirecting to bitpay.com.
