@@ -24,7 +24,7 @@ function bpCurl($url, $apiKey, $post = false) {
 		"Authorization: Basic $uname",
 		);
 
-	curl_setopt($curl, CURLOPT_PORT, 443);
+	curl_setopt($curl, CURLOPT_PORT, $bpconfig_port);
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 	curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC ) ;
