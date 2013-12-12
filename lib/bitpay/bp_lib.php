@@ -1,8 +1,6 @@
 <?php
 
 require_once 'bp_config_default.php';
-if (file_exists('bp_config.php'))
-	require_once 'bp_config.php';
 require_once 'bp_options.php';
 
 function bpCurl($url, $apiKey, $post = false) {
