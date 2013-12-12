@@ -1,5 +1,8 @@
 <?php
 
+require_once 'bp_config_default.php';
+if (file_exists('bp_config.php'))
+	require_once 'bp_config.php';
 require_once 'bp_options.php';
 
 function bpCurl($url, $apiKey, $post = false) {
@@ -21,7 +24,7 @@ function bpCurl($url, $apiKey, $post = false) {
 		"Authorization: Basic $uname",
 		);
 
-	curl_setopt($curl, CURLOPT_PORT, 443);
+	curl_setopt($curl, CURLOPT_PORT, $bpconfig_port);
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 	curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC ) ;
@@ -80,7 +83,7 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 			$post[$o] = $options[$o];
 	$post = json_encode($post);
 	
-	$response = bpCurl('https://bitpay.com/api/invoice/', $options['apiKey'], $post);
+	$response = bpCurl('https://'.$bpconfig_hostAndPort.'/api/invoice/', $options['apiKey'], $post);
 
 	return $response;
 }
@@ -117,7 +120,7 @@ function bpGetInvoice($invoiceId, $apiKey=false) {
 	if (!$apiKey)
 		$apiKey = $bpOptions['apiKey'];		
 
-	$response = bpCurl('https://bitpay.com/api/invoice/'.$invoiceId, $apiKey);
+	$response = bpCurl('https://'.$bpconfig_hostAndPort.'/api/invoice/'.$invoiceId, $apiKey);
 	if (is_string($response))
 		return $response; // error
 	$response['posData'] = json_decode($response['posData'], true);
