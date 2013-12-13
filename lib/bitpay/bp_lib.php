@@ -4,7 +4,7 @@ require_once 'bp_config_default.php';
 require_once 'bp_options.php';
 
 function bpCurl($url, $apiKey, $post = false) {
-	global $bpOptions;	
+	global $bpOptions, $bpconfig;	
 		
 	$curl = curl_init($url);
 	$length = 0;
@@ -22,12 +22,12 @@ function bpCurl($url, $apiKey, $post = false) {
 		"Authorization: Basic $uname",
 		);
 
-	curl_setopt($curl, CURLOPT_PORT, $bpconfig_port);
+	curl_setopt($curl, CURLOPT_PORT, $bpconfig['port']);
 	curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
 	curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 	curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC ) ;
-	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $bpconfig_ssl_verifypeer); // verify certificate
-	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $bpconfig_ssl_verifyhost); // check existence of CN and verify that it matches hostname
+	curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, $bpconfig['ssl_verifypeer']); // verify certificate
+	curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, $bpconfig['ssl_verifyhost']); // check existence of CN and verify that it matches hostname
 	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt($curl, CURLOPT_FORBID_REUSE, 1);
 	curl_setopt($curl, CURLOPT_FRESH_CONNECT, 1);
@@ -61,7 +61,7 @@ function bpCurl($url, $apiKey, $post = false) {
 // If a given option is not provided here, the value of that option will default to what is found in bp_options.php
 // (see api documentation for information on these options).
 function bpCreateInvoice($orderId, $price, $posData, $options = array()) {	
-	global $bpOptions;	
+	global $bpOptions, $bpconfig;	
 	
 	$options = array_merge($bpOptions, $options);	// $options override any options found in bp_options.php
 	
@@ -81,14 +81,14 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array()) {
 			$post[$o] = $options[$o];
 	$post = json_encode($post);
 	
-	$response = bpCurl('https://'.$bpconfig_hostAndPort.'/api/invoice/', $options['apiKey'], $post);
+	$response = bpCurl('https://'.$bpconfig['hostAndPort'].'/api/invoice/', $options['apiKey'], $post);
 
 	return $response;
 }
 
 // Call from your notification handler to convert $_POST data to an object containing invoice data
 function bpVerifyNotification($apiKey = false) {
-	global $bpOptions;
+	global $bpOptions, $bpconfig;
 	if (!$apiKey)
 		$apiKey = $bpOptions['apiKey'];		
 	
@@ -114,11 +114,11 @@ function bpVerifyNotification($apiKey = false) {
 
 // $options can include ('apiKey')
 function bpGetInvoice($invoiceId, $apiKey=false) {
-	global $bpOptions;
+	global $bpOptions, $bpconfig;
 	if (!$apiKey)
 		$apiKey = $bpOptions['apiKey'];		
 
-	$response = bpCurl('https://'.$bpconfig_hostAndPort.'/api/invoice/'.$invoiceId, $apiKey);
+	$response = bpCurl('https://'.$bpconfig['hostAndPort'].'/api/invoice/'.$invoiceId, $apiKey);
 	if (is_string($response))
 		return $response; // error
 	$response['posData'] = json_decode($response['posData'], true);
