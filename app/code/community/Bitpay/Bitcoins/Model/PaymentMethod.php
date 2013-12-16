@@ -187,7 +187,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 			'buyerName' => $order->getCustomerFirstname().' '.$order->getCustomerLastname(),			
 			'fullNotifications' => 'true',
 			'notificationURL' => Mage::getUrl('bitpay_callback'),
-			'redirectURL' => Mage::getUrl('customer/account'),
+			'redirectURL' => Mage::getUrl('checkout/onepage/success'),
 			'transactionSpeed' => $speed,
 			'apiKey' => $apiKey,
 			);
