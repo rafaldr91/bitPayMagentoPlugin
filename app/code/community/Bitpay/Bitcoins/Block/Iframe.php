@@ -44,7 +44,7 @@ class Bitpay_Bitcoins_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
 			'currency' => $quote->getQuoteCurrencyCode(),
 			'fullNotifications' => 'true',
 			'notificationURL' => Mage::getUrl('bitpay_callback'),
-			'redirectURL' => Mage::getUrl('customer/account'),
+			'redirectURL' => Mage::getUrl('checkout/onepage/success'),
 			'transactionSpeed' => $speed,
 			'apiKey' => $apiKey,
 			);
