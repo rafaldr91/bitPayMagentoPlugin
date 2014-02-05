@@ -158,6 +158,10 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
   }
   
+  function MarkOrderCancelled($order) {
+    $order->setState(Mage_Sales_Model_Order::STATE_CANCELLED, true)->save();
+}
+	
   // given Mage_Core_Model_Abstract, return api-friendly address
   function ExtractAddress($address) {
     $options = array();
