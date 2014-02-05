@@ -60,7 +60,6 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action 
             $method = Mage::getModel('Bitcoins/paymentMethod');
             $method->MarkOrderPaid($order);
             break;
-          case 'expired':
           case 'invalid':
             $method = Mage::getModel('Bitcoins/paymentMethod');
             $method->MarkOrderCancelled($order);
