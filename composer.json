@@ -1,0 +1,9 @@
+{
+  "name": "bitpay/bitcoins",
+  "description": "Bitcoin payment module using the bitpay.com service",
+  "minimum-stability": "dev",
+  "type": "magento-module",
+  "require": {
+    "magento-hackathon/magento-composer-installer": "dev-master"
+  }
+}
