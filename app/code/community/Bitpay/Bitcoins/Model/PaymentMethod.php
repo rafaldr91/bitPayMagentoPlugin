@@ -156,6 +156,11 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
       $transactionSave->save();
       $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_COMPLETE);
+      try {
+        $order->sendNewOrderEmail();
+      } catch (Exception $e) {
+        Mage::logException($e);
+      }
     } else {
       Mage::log('Count of InvoiceCollection was zero! Order not invoiced.', null, 'bitpay.log');
     }
