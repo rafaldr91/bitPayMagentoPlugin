@@ -53,7 +53,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
   /**
    * Can capture funds online?
    */
-  protected $_canCapture              = false;
+  protected $_canCapture              = true;
  
   /**
    * Can capture partial amounts online?
@@ -93,7 +93,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
   //protected $_formBlockType = 'bitcoins/form';
   //protected $_infoBlockType = 'bitcoins/info';
   
-  function canUseForCurrency($currencyCode) {    
+  function canUseForCurrency($currencyCode) {
     $currencies = Mage::getStoreConfig('payment/Bitcoins/currencies');
     $currencies = array_map('trim', explode(',', $currencies));
     return array_search($currencyCode, $currencies) !== false;
@@ -144,32 +144,61 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
 
     if (!count($order->getInvoiceCollection())) {
-      $invoice = $order->prepareInvoice()
-        ->setTransactionId(1)
-        ->addComment('Invoiced automatically by Bitpay/Bitcoins/controllers/IndexController.php')
-        ->register()
-        ->pay();
-
-      $transactionSave = Mage::getModel('core/resource_transaction')
-        ->addObject($invoice)
-        ->addObject($invoice->getOrder());
-
-      $transactionSave->save();
-      $order->addStatusToHistory(Mage_Sales_Model_Order::STATE_COMPLETE);
       try {
-        $order->sendNewOrderEmail();
+        $invoice = $order->prepareInvoice()
+          ->setTransactionId(1)
+          ->addComment('Invoiced automatically by Bitpay/Bitcoins/controllers/IndexController.php')
+          ->register()
+          ->pay();
+
+        $transactionSave = Mage::getModel('core/resource_transaction')
+          ->addObject($invoice)
+          ->addObject($invoice->getOrder());
+
+        $transactionSave->save();
       } catch (Exception $e) {
         Mage::logException($e);
       }
-    } else {
-      Mage::log('Count of InvoiceCollection was zero! Order not invoiced.', null, 'bitpay.log');
     }
+  }
+
+  function MarkOrderComplete($order) {
+    if ($order->hasInvoices()) {
+      foreach ($order->getInvoiceCollection() as $_eachInvoice) {
+        try {
+          $_eachInvoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+          $_eachInvoice->capture()->save();
+        } catch (Exception $e) {
+          Mage::logException($e);
+        }
+      }
+    }
+
+    $shipment = $order->prepareShipment();
+    if($shipment) {
+      $shipment->register();
+      $order->setIsInProcess(true);
+
+      $transaction_save = Mage::getModel('core/resource_transaction')
+        ->addObject($shipment)
+        ->addObject($shipment->getOrder())
+        ->save();
+    }
+
+    try {
+      $order->setState('Complete', 'complete', 'Completed by BitPay payments.', false);
+      $order->save();
+    } catch (Exception $e) {
+      Mage::logException($e);
+    }
+
+
   }
   
   function MarkOrderCancelled($order) {
     $order->setState(Mage_Sales_Model_Order::STATE_CANCELLED, true)->save();
-}
-	
+  }
+
   // given Mage_Core_Model_Abstract, return api-friendly address
   function ExtractAddress($address) {
     $options = array();
@@ -178,7 +207,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     if ($address->getCompany())
       $options['buyerName'] = $options['buyerName'].' c/o '.$address->getCompany();
 
-	$options['buyerAddress1'] = $address->getStreet1();
+    $options['buyerAddress1'] = $address->getStreet1();
     $options['buyerAddress2'] = $address->getStreet2();
     $options['buyerAddress3'] = $address->getStreet3();
     $options['buyerAddress4'] = $address->getStreet4();
@@ -193,11 +222,11 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     foreach(array('buyerName', 'buyerAddress1', 'buyerAddress2', 'buyerAddress3', 'buyerAddress4', 'buyerCity', 'buyerState', 'buyerZip', 'buyerCountry', 'buyerEmail', 'buyerPhone') as $f)
       $options[$f] = substr($options[$f], 0, 100); 
 
-	return $options;
+    return $options;
   }
   
   function CreateInvoiceAndRedirect($payment, $amount) {
-    include Mage::getBaseDir('lib').'/bitpay/bp_lib.php';    
+    include Mage::getBaseDir('lib').'/bitpay/bp_lib.php';
 
     $apiKey = Mage::getStoreConfig('payment/Bitcoins/api_key');
     $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
@@ -206,7 +235,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
     $options = array(
       'currency' => $order->getBaseCurrencyCode(),
-      'buyerName' => $order->getCustomerFirstname().' '.$order->getCustomerLastname(),      
+      'buyerName' => $order->getCustomerFirstname().' '.$order->getCustomerLastname(),
       'fullNotifications' => 'true',
       'notificationURL' => Mage::getUrl('bitpay_callback'),
       'redirectURL' => Mage::getUrl('checkout/onepage/success'),
@@ -214,7 +243,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
       'apiKey' => $apiKey,
       );
 
-	$options += $this->ExtractAddress($order->getShippingAddress());
+    $options += $this->ExtractAddress($order->getShippingAddress());
     $invoice = bpCreateInvoice($orderId, $amount, array('orderId' => $orderId), $options);
     $payment->setIsTransactionPending(true); // status will be PAYMENT_REVIEW instead of PROCESSING
 
