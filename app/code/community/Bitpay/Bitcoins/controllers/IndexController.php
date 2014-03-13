@@ -31,7 +31,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action 
   }
 
   // bitpay's IPN lands here
-  public function indexAction() {		
+  public function indexAction() {
     require Mage::getBaseDir('lib').'/bitpay/bp_lib.php';
     Mage::log(file_get_contents('php://input'), null, 'bitpay.log');
     $apiKey = Mage::getStoreConfig('payment/Bitcoins/api_key');
@@ -55,10 +55,14 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action 
       // update the order if it exists already
       if ($order->getId())
         switch($invoice['status']) {
+          case 'paid':
+            $method = Mage::getModel('Bitcoins/paymentMethod');
+            $method->MarkOrderPaid($order);
+            break;
           case 'confirmed':							
           case 'complete':					
             $method = Mage::getModel('Bitcoins/paymentMethod');
-            $method->MarkOrderPaid($order);
+            $method->MarkOrderComplete($order);
             break;
           case 'invalid':
             $method = Mage::getModel('Bitcoins/paymentMethod');
