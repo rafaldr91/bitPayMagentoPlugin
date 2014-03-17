@@ -174,19 +174,20 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
       }
     }
 
-    $shipment = $order->prepareShipment();
-    if($shipment) {
-      $shipment->register();
-      $order->setIsInProcess(true);
+    //$shipment = $order->prepareShipment();
+    //if($shipment) {
+    //  $shipment->register();
+    //  $order->setIsInProcess(true);
 
-      $transaction_save = Mage::getModel('core/resource_transaction')
-        ->addObject($shipment)
-        ->addObject($shipment->getOrder())
-        ->save();
-    }
+    //  $transaction_save = Mage::getModel('core/resource_transaction')
+    //    ->addObject($shipment)
+    //    ->addObject($shipment->getOrder())
+    //    ->save();
+    //}
 
     try {
-      $order->setState('Complete', 'complete', 'Completed by BitPay payments.', false);
+      //$order->setState('Complete', 'complete', 'Completed by BitPay payments.', true);
+      $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, 'processing', 'BitPay has confirmed the payment.', true);
       $order->save();
     } catch (Exception $e) {
       Mage::logException($e);
