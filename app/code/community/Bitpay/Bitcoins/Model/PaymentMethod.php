@@ -88,8 +88,13 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
   /**
    * Can save credit card information for future processing?
    */
-  protected $_canSaveCc = false;
-  
+  protected $_canSaveCc               = false;
+
+  /**
+   * BitPay - create shipment automatically after completing order? 
+   */
+  protected $_bpCreateShipment        = false;
+   
   //protected $_formBlockType = 'bitcoins/form';
   //protected $_infoBlockType = 'bitcoins/info';
   
@@ -174,30 +179,47 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
       }
     }
 
-    //$shipment = $order->prepareShipment();
-    //if($shipment) {
-    //  $shipment->register();
-    //  $order->setIsInProcess(true);
-
-    //  $transaction_save = Mage::getModel('core/resource_transaction')
-    //    ->addObject($shipment)
-    //    ->addObject($shipment->getOrder())
-    //    ->save();
-    //}
+    // If the $_bpCreateShipment option is set to true above, this code will
+    // programmatically create a shipment for you.  By design, this will mark
+    // the entire order as 'complete'.
+    if(isset($_bpCreateShipment) && $_bpCreateShipment == true) {
+      try {
+        $shipment = $order->prepareShipment();
+        if($shipment) {
+          $shipment->register();
+          $order->setIsInProcess(true);
+          $transaction_save = Mage::getModel('core/resource_transaction')
+            ->addObject($shipment)
+            ->addObject($shipment->getOrder())
+            ->save();
+        }
+      } catch (Exception $e) {
+        Mage::log('Error creating shipment', null, 'bitpay.log');
+        Mage::logException($e);
+      }
+    }
 
     try {
-      //$order->setState('Complete', 'complete', 'Completed by BitPay payments.', true);
-      $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, 'processing', 'BitPay has confirmed the payment.', true);
+      if(isset($_bpCreateShipment) && $_bpCreateShipment == true) {
+        $order->setState('Complete', 'complete', 'Completed by BitPay payments.', true);
+      } else {
+        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, 'processing', 'BitPay has confirmed the payment.', false);
+        $order->sendNewOrderEmail();
+      }
       $order->save();
     } catch (Exception $e) {
       Mage::logException($e);
     }
 
-
   }
   
   function MarkOrderCancelled($order) {
-    $order->setState(Mage_Sales_Model_Order::STATE_CANCELLED, true)->save();
+    try {
+      $order->setState(Mage_Sales_Model_Order::STATE_CANCELLED, true)->save();
+    } catch (Exception $e) {
+      Mage::log('Could not cancel order', null, 'bitpay.log');
+      Mage::logException($e);
+    }
   }
 
   // given Mage_Core_Model_Abstract, return api-friendly address
