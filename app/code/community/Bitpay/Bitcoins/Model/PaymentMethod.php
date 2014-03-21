@@ -204,7 +204,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $order->setState('Complete', 'complete', 'Completed by BitPay payments.', true);
       } else {
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, 'processing', 'BitPay has confirmed the payment.', false);
-        $order->sendNewOrderEmail();
+        if(!$order->getEmailSent()) $order->sendNewOrderEmail();
       }
       $order->save();
     } catch (Exception $e) {
