@@ -1,4 +1,4 @@
-©2011-2014 BITPAY, INC.
+<strong>©2011-2014 BITPAY, INC.</strong>
 
 Permission is hereby granted to any person obtaining a copy of this software
 and associated documentation for use and/or modification in association with
@@ -12,25 +12,63 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-Bitcoin payment module using the bitpay.com service.
+Bitcoin payment module for Magento Community Edition using the bitpay.com service.
+
 
 Installation
 ------------
-Copy these files into your Magento directory.
+<strong>1.</strong>  Unzip this archive and copy the files to the location of your Magento CE installation on your web server.  For Ubuntu-based servers, the default location for website files is the /var/www folder.  Your web hosting provider may use a different location for storing your website files so check with them if the /var/www folder does not exist or your Magento files are in an otherwise unknown location.
+
+Many web hosting accounts have a graphical, web-based control panel for your server.  This is the easiest method for copying the BitPay plugin files to your Magenento CE directory.  If your provider has one of these graphical control panels, log into your hosting account and move the files using that tool.  However, if that is not an option and you can only access your web server using a shell account via SSH, open a new connection and issue these commands:
+
+<pre>
+bitpay@bitpay:~$ unzip magento-plugin-master.zip
+bitpay@bitpay:~$ cd magento-plugin-master
+bitpay@bitpay:~$ cp -R ./* /location/of/your/magento/installation/
+</pre>
+
+<strong>Note:</strong>  You may need to have superuser privileges to copy files to /var/www on Ubuntu-based servers.  If you receive “Permission denied” errors when using the cp command above, use sudo before the cp command and specify the superuser password when asked:
+
+<pre>
+bitpay@bitpay:~$ sudo cp -R ./* /location/of/your/magento/installation/
+[sudo] password for (username):
+</pre>
+
+<strong>2.</strong>  Verify the files have been copied correctly by checking your Magento CE installation folder for one or more of them.  You can choose to check for any of the files present in the BitPay plugin archive.  The file I’m looking for in this example should be in the /var/www/magento/app/code/community/Bitpay/Bitcoins/Model directory along with the Ipn.php file on my Ubuntu server:
+
+<pre>
+bitpay@bitpay:~$ ls -l /var/www/magento/app/code/community/Bitpay/Bitcoins/Model/
+total 24
+-rw-r--r-- 1 root root  3097 Mar 25 14:06 Ipn.php
+-rw-r--r-- 1 root root 10786 Mar 25 14:06 PaymentMethod.php
+drwxr-xr-x 3 root root  4096 Mar 25 13:54 Resource
+drwxr-xr-x 2 root root  4096 Mar 25 13:54 Source
+</pre>
+
+If the files were copied correctly and are present in the directory, you should see the files listed when you issue the ls command.  If you do not see any files listed, try the cp command again to retry the copying procedure.  However, if you still do not see any files listed or you receive an error copying the files, contact your web hosting support for assistance.
+
+
+Magento CE 1.8.x Installation Tips
+----------------------------------
+In some instances for merchants using Magento CE version 1.8.x, the BitPay Bitcoins payment plugin might not appear in the Payment Methods configuration section even though all plugin files have been correctly installed.  To resolve this issue, log into your admin control panel and choose the System -> Cache Management configuration screen.  Click the check box next to the Configuration cache type and choose the Disable action from the Actions drop-down list box.  Click the Submit button to disable this cache.
+
+Next, click both the Flush Magento Cache and Flush Cache Storage buttons (Clicked "Ok" when the pop-up box is displayed) to remove the stale configuration cache files.
+
+Finally, log completely out of the administrative control panel and then log back in.  The Bitcoins option is now correctly displaying under Payment Methods in the configuration screen.  The BitPay plugin parameters are exactly the same on Magento CE 1.8.x as on older Magento CE releases.
+
 
 Configuration
 -------------
-NOTE: SSL is required for use of the BitPay plugin for Magento
+<strong>NOTE:</strong>  SSL is <em>required</em> for use of the BitPay plugin for Magento CE.
 
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
 2. In Admin panel under "System > Configuration > Sales > Payment Methods > Bitcoins":
-<ol type="a">
- <li>Verify that the module is enabled. 
- <li>Enter your API key.  
- <li>Select a transaction speed.  The **high** speed will send a confirmation as soon as a transaction is received in the bitcoin network (usually a few seconds).  A **medium** speed setting will typically take 10 minutes.  The **low** speed setting usually takes around 1 hour.  See the bitpay.com merchant documentation for a full description of the transaction speed settings. 
- <li>Verify that the currencies option includes your store's currencies.  If it doesn't, check bitpay.com to see if they support your desired currency.  If so, you may simply add the currency to the list using this setting.  If not, you will not be able to use that currency. 
- <li>(optional) Adjust the "Fullscreen Invoice" setting.  "No" means that payment instructions are embedded in the checkout page.  "Yes" means that the buyer will be redirected to bitpay.com to pay their order. 
-</ol>	
+  - Verify that the module is enabled. 
+  - Enter your API key.  
+  - Select a transaction speed.  The **high** speed will send a confirmation as soon as a transaction is received in the bitcoin network (usually a few seconds).  A **medium** speed setting will typically take 10 minutes.  The **low** speed setting usually takes around 1 hour.  See the bitpay.com merchant documentation for a full description of the transaction speed settings. 
+  - Verify that the currencies option includes your store's currencies.  If it doesn't, check bitpay.com to see if they support your desired currency.  If so, you may simply add the currency to the list using this setting.  If not, you will not be able to use that currency. 
+  - (optional) Adjust the "Fullscreen Invoice" setting.  "No" means that payment instructions are embedded in the checkout page.  "Yes" means that the buyer will be redirected to bitpay.com to pay their order.  The default setting is "No".
+
 
 Usage
 -----
@@ -40,13 +78,39 @@ The order status in the admin panel will be "Processing" if payment has been con
 
 Note: This extension does not provide a means of automatically pulling a current BTC exchange rate for presenting BTC prices to shoppers.
 
+
+Troubleshooting
+---------------
+The official BitPay support website should always be your first reference for troubleshooting any problems you may encounter: https://support.bitpay.com
+
+The official Magento Community Edition support website might also be helpful if the problem you are experiencing is not directly related to the payment plugin: https://www.magentocommerce.com/support/ce/
+
+<strong>Other troubleshooting tips:</strong>
+
+1. Ensure a valid SSL certificate is installed on your server. Also ensure your root CA cert is
+   updated. If your CA cert is not current, you will see curl SSL verification errors.
+2. Verify that your web server is not blocking POSTs from servers it may not recognize. Double
+   check this on your firewall as well, if one is being used.
+3. Check the bitpay.log file for any errors during BitPay payment attempts. If you contact BitPay
+   support, they will ask to see the log file to help diagnose the problem.
+4. Check the version of this plugin agains the official plugin repository to ensure you are using
+   the latest version. Your issue might have been addressed in a newer version!
+5. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
+
+
 Change Log
 ----------
-Version 1
-  - Initial version, tested against Magento 1.6.0.0
+<strong>Version 1</strong><br />
+- Initial version, tested against Magento 1.6.0.0
 
-Version 2
-  - Now supports API keys instead of SSL files.  Tested against 1.7.0.2.
+<strong>Version 2</strong><br />
+- Now supports API keys instead of SSL files.  Tested against 1.7.0.2.
  
-Version 3
-  - Now gives the option to show an iframe on the checkout page instead of redirecting to bitpay.com.
+<strong>Version 3</strong><br />
+- Now gives the option to show an iframe on the checkout page instead of redirecting to bitpay.com.
+
+<strong>Version 4</strong><br />
+- Improved README documentation.
+- Additional testing performed against 1.8.1.0 and installation instructions updated to reflect differences.
+- Added parameter to automatically create a shipment and mark orders complete (off by default).
+- Version incremented, other bug fixes and enhancements (see commit notes).
