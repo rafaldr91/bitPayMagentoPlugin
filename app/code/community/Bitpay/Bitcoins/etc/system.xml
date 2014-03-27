@@ -1,84 +1,97 @@
 <?xml version="1.0"?>
 <config>
-   <sections>
-		<payment>
-			<groups>
-				<Bitcoins translate="label" module="paygate">
-					<label>Bitcoins</label>
-					<sort_order>670</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>0</show_in_store>
-					<fields>
-						<active translate="label">
-							<label>Enabled</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>0</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</active>
-						
-						<title translate="label">
-							<label>Title</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>1</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</title>
-						
-						<fullscreen translate="label">
-							<label>Fullscreen invoice</label>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>2</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</fullscreen>
-						
-						<api_key translate="label">
-							<label>API key</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>3</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</api_key>
-						
-						<speed translate="label">
-							<label>Transaction Speed</label>
-							<frontend_type>select</frontend_type>
-							<source_model>Bitpay_Bitcoins_Model_Source_Speed</source_model>
-							<sort_order>5</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</speed>
-						
-						<currencies translate="label">
-							<label>Currencies accepted by bitpay.com</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>6</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</currencies>
-						
-						<sort_order translate="label">
-							<label>Sort Order</label>
-							<frontend_type>text</frontend_type>
-							<sort_order>7</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>0</show_in_store>
-						</sort_order>
-						
-					</fields>
-				</Bitcoins>
-			</groups>
-		</payment>
-	</sections>
+  <sections>
+    <payment>
+      <groups>
+        <Bitcoins translate="label" module="paygate">
+          <label>Bitcoins</label>
+          <sort_order>670</sort_order>
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>0</show_in_store>
+          <comment><![CDATA[<img src="https://bitpay.com/img/logo.png" alt="BitPay" height="73" width="93" /><br /><strong>To log into your merchant account or download the latest version of this plugin, visit our website: <a href="https://bitpay.com/" target="_blank">https://bitpay.com/</a></strong><br />]]></comment>
+          <fields>
+            <active translate="label">
+              <label>Enabled</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>0</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </active>
+            
+            <title translate="label">
+              <label>Title</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>1</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </title>
+            
+            <fullscreen translate="label">
+              <label>Fullscreen invoice</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>2</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </fullscreen>
+            
+            <api_key translate="label">
+              <label>API key</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>3</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </api_key>
+            
+            <speed translate="label">
+              <label>Transaction Speed</label>
+              <frontend_type>select</frontend_type>
+              <source_model>Bitpay_Bitcoins_Model_Source_Speed</source_model>
+              <sort_order>5</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <comment><![CDATA[Determines when a BitPay payment confirmation is sent.<br /><strong>High:</strong> an invoice is confirmed immediately when payment received.<br /><strong>Medium:</strong> an invoice is confirmed after 1 block confirmation by the network (~10 mins).<br /><strong>Low:</strong> an invoice is confirmed after 6 block confirmations by the network (~1 hour).<br />The default and safest setting is "Low".  A "High" setting is quicker to generate a payment confirmation but is riskier since the transaction could have not been officially confirmed by the Bitcoin network itself.]]></comment>
+            </speed>
+            
+            <currencies translate="label">
+              <label>Currencies accepted by BitPay</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>6</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </currencies>
+            
+            <sort_order translate="label">
+              <label>Sort Order</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>7</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </sort_order>
+            
+            <order_disposition translate="label">
+              <label>Set order complete with "complete" IPN</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <sort_order>8</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+              <comment>If you want to automatically set an order's state to complete when BitPay sends a completed payment notification, change this option to "Yes".  The default setting of "No" will keep the order in a processing state for you to update as needed.  Invoices contained within the order will be paid regardless of this setting.</comment>
+            </order_disposition>
+
+          </fields>
+        </Bitcoins>
+      </groups>
+    </payment>
+  </sections>
 </config>
