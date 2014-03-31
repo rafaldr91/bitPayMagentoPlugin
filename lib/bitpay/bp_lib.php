@@ -39,6 +39,7 @@ function bpCurl($url, $apiKey, $post = false) {
                   'Content-Type: application/json',
                   'Content-Length: ' . $length,
                   'Authorization: Basic ' . $uname,
+                  'X-BitPay-Plugin-Info: magento5',
                  );
 
   curl_setopt($curl, CURLOPT_PORT, $bpconfig['port']);

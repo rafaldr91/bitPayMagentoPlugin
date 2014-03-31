@@ -114,3 +114,6 @@ Change Log
 - Additional testing performed against 1.8.1.0 and installation instructions updated to reflect differences.
 - Added parameter to automatically create a shipment and mark orders complete (off by default).
 - Version incremented, other bug fixes and enhancements (see commit notes).
+
+<strong>Version 5</strong><br />
+- Added new HTTP header for version tracking
