@@ -75,11 +75,7 @@ class Bitpay_Bitcoins_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment {
     //serialize info about the quote to detect changes
     $hash = $method->getQuoteHash($quoteId);
 
-    Mage::log('invoicing for '.$price.' '.$quote->getQuoteCurrencyCode(), NULL, 'bitpay.log');
-
     $invoice = bpCreateInvoice($quoteId, $price, array('quoteId' => $quoteId, 'quoteHash' => $hash), $options);
-
-    Mage::log($invoice, NULL, 'bitpay.log');					
 
     if (array_key_exists('error', $invoice)) {
       Mage::log('Error creating bitpay invoice', null, 'bitpay.log');
