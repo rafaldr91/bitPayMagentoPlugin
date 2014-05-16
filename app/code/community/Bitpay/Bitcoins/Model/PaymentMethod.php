@@ -310,8 +310,6 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     $hash = base64_encode(hash_hmac('sha256', $description, $quoteId));
     $hash = substr($hash, 0, 30); // fit it in posData maxlen
     
-    Mage::log("quote $quoteId descr $description hash $hash", NULL, 'bitpay.log');
-    
     return $hash;
   }
   
