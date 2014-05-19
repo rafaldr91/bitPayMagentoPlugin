@@ -48,8 +48,8 @@ drwxr-xr-x 2 root root  4096 Mar 25 13:54 Source
 If the files were copied correctly and are present in the directory, you should see the files listed when you issue the ls command.  If you do not see any files listed, try the cp command again to retry the copying procedure.  However, if you still do not see any files listed or you receive an error copying the files, contact your web hosting support for assistance.
 
 
-Magento CE 1.8.x Installation Tips
-----------------------------------
+Magento CE 1.8.x - 1.9.x Installation Tips
+------------------------------------------
 In some instances for merchants using Magento CE version 1.8.x, the BitPay Bitcoins payment plugin might not appear in the Payment Methods configuration section even though all plugin files have been correctly installed.  To resolve this issue, log into your admin control panel and choose the System -> Cache Management configuration screen.  Click the check box next to the Configuration cache type and choose the Disable action from the Actions drop-down list box.  Click the Submit button to disable this cache.
 
 Next, click both the Flush Magento Cache and Flush Cache Storage buttons (Clicked "Ok" when the pop-up box is displayed) to remove the stale configuration cache files.
@@ -92,7 +92,8 @@ The official Magento Community Edition support website might also be helpful if 
 2. Verify that your web server is not blocking POSTs from servers it may not recognize. Double
    check this on your firewall as well, if one is being used.
 3. Check the bitpay.log file for any errors during BitPay payment attempts. If you contact BitPay
-   support, they will ask to see the log file to help diagnose the problem.
+   support, they will ask to see the log file to help diagnose the problem.  The log file will be found 
+   inside your Magento's var/log/ directory.
 4. Check the version of this plugin agains the official plugin repository to ensure you are using
    the latest version. Your issue might have been addressed in a newer version!
 5. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
@@ -117,3 +118,8 @@ Change Log
 
 <strong>Version 5</strong><br />
 - Added new HTTP header for version tracking
+
+<strong>Version 6</strong></br >
+- Updated BitPay logo in admin settings
+- Tested & validated against latest 1.9.0.1
+- Tested & validated with default one-page checkout settings
