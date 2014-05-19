@@ -9,7 +9,7 @@
           <show_in_default>1</show_in_default>
           <show_in_website>1</show_in_website>
           <show_in_store>0</show_in_store>
-          <comment><![CDATA[<img src="https://bitpay.com/img/logo.png" alt="BitPay" height="73" width="93" /><br /><strong>To log into your merchant account or download the latest version of this plugin, visit our website: <a href="https://bitpay.com/" target="_blank">https://bitpay.com/</a></strong><br />]]></comment>
+          <comment><![CDATA[<img src="https://raw.githubusercontent.com/bitpay/bitpay-brand/master/bitpay-logo-inverse.png" alt="BitPay" height="73" width="123" /><br /><strong>To log into your merchant account or download the latest version of this plugin, visit our website: <a href="https://bitpay.com/" target="_blank">https://bitpay.com/</a></strong><br />]]></comment>
           <fields>
             <active translate="label">
               <label>Enabled</label>
