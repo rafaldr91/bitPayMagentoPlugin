@@ -134,7 +134,8 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     $ipn = Mage::getModel('Bitcoins/ipn');
 
     if (!$ipn->GetQuotePaid($quoteId)) {
-      Mage::throwException("Order ". $order->getId() ." not paid for.  Please pay first and then Place your Order.");
+      // This is the error that is displayed to the customer during checkout.
+      Mage::throwException("Order not paid for.  Please pay first and then Place your Order.");
     } else if (!$ipn->GetQuoteComplete($quoteId)) {
       // order status will be PAYMENT_REVIEW instead of PROCESSING
       $payment->setIsTransactionPending(true); 
