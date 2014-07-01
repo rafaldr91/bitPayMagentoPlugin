@@ -1,3 +1,6 @@
+BitPay Inc Magento Plugin
+=========================
+
 <strong>©2011-2014 BITPAY, INC.</strong>
 
 Permission is hereby granted to any person obtaining a copy of this software
@@ -14,10 +17,10 @@ THE SOFTWARE.
 
 Bitcoin payment module for Magento Community Edition using the bitpay.com service.
 
+# Installation
 
-Installation
-------------
-<strong>1.</strong>  Unzip this archive and copy the files to the location of your
+## Download
+<strong>1.</strong> [Download](https://github.com/bitpay/magento-plugin/archive/master.zip) and Unzip this archive and copy the files to the location of your
 [Magento CE](http://magento.com/) installation on your web server. For Ubuntu-based servers, the default
 location for website files is the `/var/www` folder. Your web hosting provider may
 use a different location for storing your website files so check with them if the
@@ -66,14 +69,14 @@ listed, try the cp command again to retry the copying procedure.  However, if
 you still do not see any files listed or you receive an error copying the files,
 contact your web hosting support for assistance.
 
-<strong>3.</strong> Using [modman](https://github.com/colinmollenhour/modman) you can
+## modman
+Using [modman](https://github.com/colinmollenhour/modman) you can
 install the BitPay Magento Plugin. Once
 you have modman installed, run `modman init` if you have not already done so. Next
 just run `modman clone https://github.com/bitpay/magento-plugin.git` in the root
 of the Magento installation. In this case it is `/var/www/magento`.
 
-Magento CE 1.8.x - 1.9.x Installation Tips
-------------------------------------------
+# Magento CE 1.8.x - 1.9.x Installation Tips
 In some instances for merchants using Magento CE version 1.8.x, the BitPay
 Bitcoins payment plugin might not appear in the Payment Methods configuration
 section even though all plugin files have been correctly installed. To
@@ -90,8 +93,7 @@ in. The Bitcoins option is now correctly displaying under Payment Methods in the
 configuration screen. The BitPay plugin parameters are exactly the same on Magento
 CE 1.8.x as on older Magento CE releases.
 
-Configuration
--------------
+# Configuration
 <strong>NOTE:</strong>  SSL is <em>required</em> for use of the BitPay plugin for Magento CE.
 
 1. Create an API key at bitpay.com by clicking My Account > API Access Keys > Add New API Key.
@@ -112,8 +114,7 @@ Configuration
     will be redirected to bitpay.com to pay their order.  The default setting is
     "No".
 
-Usage
------
+# Usage
 When a shopper chooses the Bitcoin payment method, they will be presented with an
 order summary as the next step (prices are shown in whatever currency they've
 selected for shopping).  If the fullscreen option is disabled, they can pay for
@@ -125,8 +126,7 @@ The order status in the admin panel will be "Processing" if payment has been con
 Note: This extension does not provide a means of automatically pulling a current BTC
 exchange rate for presenting BTC prices to shoppers.
 
-Troubleshooting
----------------
+# Troubleshooting
 The official BitPay support website should always be your first reference for
 troubleshooting any problems you may encounter: https://support.bitpay.com
 
@@ -140,16 +140,21 @@ plugin: https://www.magentocommerce.com/support/ce/
    updated. If your CA cert is not current, you will see curl SSL verification errors.
 2. Verify that your web server is not blocking POSTs from servers it may not recognize. Double
    check this on your firewall as well, if one is being used.
-3. Check the bitpay.log file for any errors during BitPay payment attempts. If you contact BitPay
+3. Check the `bitpay.log` file for any errors during BitPay payment attempts. If you contact BitPay
    support, they will ask to see the log file to help diagnose the problem.  The log file will be found 
-   inside your Magento's var/log/ directory.
-4. Check the version of this plugin agains the official plugin repository to ensure you are using
+   inside your Magento's `var/log/` directory.
+4. Check the version of this plugin against the official plugin repository to ensure you are using
    the latest version. Your issue might have been addressed in a newer version!
 5. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
 
+NOTE: When contacting support it will help us is you provide:
+* Magento Version
+* Other plugins you have installed
+* Some configuration settings such as:
+  * Transaction Speed
+  * Set order complete with "complete" IPN
 
-Change Log
-----------
+# Change Log
 <strong>Version 1</strong><br />
 - Initial version, tested against Magento 1.6.0.0
 
