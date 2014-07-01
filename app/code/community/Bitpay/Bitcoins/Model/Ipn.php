@@ -50,14 +50,14 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract {
     $quote = Mage::getModel('sales/quote')->load($quoteId, 'entity_id');
 
     if (!$quote) {
-      Mage::log('quote not found', NULL, 'bitpay.log');
+      Mage::log('quote not found', Zend_Log::WARN, 'bitpay.log');
       return false;
     }
 
     $quoteHash = Mage::getModel('Bitcoins/paymentMethod')->getQuoteHash($quoteId);
 
     if (!$quoteHash) {
-      Mage::log('Could not find quote hash for quote '.$quoteId, NULL, 'bitpay.log');
+      Mage::log('Could not find quote hash for quote '.$quoteId, Zend_Log::WARN, 'bitpay.log');
       return false;		
     }
 
