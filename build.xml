@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="bitpay/magento-plugin" default="lint">
+    <target name="lint">
+        <phplint>
+            <fileset dir="app/code/community/Bitpay/Bitcoins">
+                <include name="**/*.php"/>
+            </fileset>
+            <fileset dir="lib/bitpay">
+                <include name="**/*.php"/>
+            </fileset>
+        </phplint>
+    </target>
+</project>

@@ -1,9 +1,31 @@
 {
-  "name": "bitpay/bitcoins",
-  "description": "Bitcoin payment module using the bitpay.com service",
-  "minimum-stability": "dev",
-  "type": "magento-module",
-  "require": {
-    "magento-hackathon/magento-composer-installer": "dev-master"
-  }
+    "name": "bitpay/magento-plugin",
+    "description": "Bitcoin payment module using the bitpay.com service",
+    "keywords": ["magento","bitcoin"],
+    "minimum-stability": "dev",
+    "type": "magento-plugin",
+    "homepage": "https://github.com/bitpay/magento-plugin",
+    "license": "MIT",
+    "support": {
+        "email": "support@bitpay.com",
+        "issues": "https://github.com/bitpay/magento-plugin/issues",
+        "source": "https://github.com/bitpay/magento-plugin"
+    },
+    "require": {
+        "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phing/phing": "*"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "6.0.x-dev"
+        }
+    },
+    "archive": {
+        "exclude": ["build.xml"]
+    }
 }
