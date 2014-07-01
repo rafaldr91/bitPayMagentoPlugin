@@ -37,7 +37,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action 
     $invoice = bpVerifyNotification($apiKey);
 
     if (is_string($invoice))
-      Mage::log("bitpay callback error: $invoice", null, 'bitpay.log');
+      Mage::log("bitpay callback error: $invoice", Zend_Log::ERR, 'bitpay.log');
     else {
       // get the order
       if (isset($invoice['posData']['quoteId'])) {
@@ -72,7 +72,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action 
               $method = Mage::getModel('Bitcoins/paymentMethod');
               $method->MarkOrderComplete($order);
             } else {
-              Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', null, 'bitpay.log');
+              Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, 'bitpay.log');
             }
             break;
 
