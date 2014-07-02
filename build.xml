@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="bitpay/magento-plugin" default="lint">
-    <target name="lint">
+    <target name="clean" hidden="true">
+        <delete dir="build/logs" verbose="true" />
+    </target>
+
+    <target name="prepare" depends="clean" hidden="true">
+        <mkdir dir="build/logs" />
+    </target>
+
+    <target name="lint" depends="prepare">
         <phplint>
             <fileset dir="app/code/community/Bitpay/Bitcoins">
                 <include name="**/*.php"/>
