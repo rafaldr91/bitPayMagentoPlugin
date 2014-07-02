@@ -1,24 +1,33 @@
 <?php 
 $url = $this->GetIframeUrl();
-switch($url){
-	case 'notbitpay': break; // customer is using another payment method
-	case 'paid':
-		echo 'Order payment received.  Place Order to complete.'; break;
-	case 'disabled':
-		echo 'Please click Place Order to continue to bitpay.com.'; break;
-	case false:
-		echo 'Error creating invoice.  Please try again or try another payment solution.'; break;
-	default:
-		echo '<iframe src="'.$url.'" style="width:500px; height:150px; overflow:hidden; border:none; margin:auto; display:block;" scrolling="no" allowtransparency="true" frameborder="0"> </iframe>'; break;
+switch($url)
+{
+case 'notbitpay':
+    break; // customer is using another payment method
+case 'paid':
+    echo 'Order payment received.  Place Order to complete.';
+    break;
+case 'disabled':
+    echo 'Please click Place Order to continue to bitpay.com.';
+    break;
+case false:
+    echo 'Error creating invoice.  Please try again or try another payment solution.';
+    break;
+default:
+    echo '<iframe src="'.$url.'" style="width:500px; height:150px; overflow:hidden; border:none; margin:auto; display:block;" scrolling="no" allowtransparency="true" frameborder="0"> </iframe>';
+    break;
 }
 $quoteId = $this->GetQuoteId();
 ?>
 
 <?php
 $request = Mage::app()->getRequest();
-$url = Mage::getUrl('bitpay_callback/index/checkForPayment/');
+$url     = Mage::getUrl('bitpay_callback/index/checkForPayment/');
+
 if ($request->getScheme() == 'https')
+{
 	$url = str_replace('http://', 'https://', $url);
+}
 ?>
 <script type="text/javascript">
 //<![CDATA[
