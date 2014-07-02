@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="bitpay/magento-plugin" default="lint">
+<project name="bitpay/magento-plugin" default="build">
     <target name="clean" hidden="true">
         <delete dir="build/logs" verbose="true" />
     </target>
@@ -7,6 +7,8 @@
     <target name="prepare" depends="clean" hidden="true">
         <mkdir dir="build/logs" />
     </target>
+
+    <target name="build" depends="lint,phpunit" />
 
     <target name="lint" depends="prepare">
         <phplint>
@@ -17,5 +19,9 @@
                 <include name="**/*.php"/>
             </fileset>
         </phplint>
+    </target>
+
+    <target name="phpunit">
+        <phpunit printsummary="true" pharlocation="bin" />
     </target>
 </project>
