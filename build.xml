@@ -22,6 +22,6 @@
     </target>
 
     <target name="phpunit">
-        <phpunit printsummary="true" pharlocation="bin" />
+        <exec executable="bin/phpunit" passthru="true" />
     </target>
 </project>
