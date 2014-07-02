@@ -31,7 +31,7 @@ class Bitpay_Bitcoins_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
     }
 
     /**
-     * @return
+     * @return string
      */
     public function GetQuoteId()
     {
@@ -44,9 +44,10 @@ class Bitpay_Bitcoins_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
     /**
      * create an invoice and return the url so that iframe.phtml can display it
      *
-     * @return
+     * @return string
      */
-    public function GetIframeUrl() {
+    public function GetIframeUrl()
+    {
         // are they using bitpay?
         // @todo refactor this
         if (!($quote = Mage::getSingleton('checkout/session')->getQuote()) 
