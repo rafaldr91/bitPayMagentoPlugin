@@ -1,6 +1,6 @@
 # These files are not included when making
 # an archive of this repository.
-tests/* export-ignore
+/tests export-ignore
 .coveralls.yml export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
