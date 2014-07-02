@@ -7,7 +7,7 @@ install:
     - composer install
 before_script:
     - mysql -e 'create database magento;'
-    - rm build/magento/app/etc/local.xml
+    - if [ -e build/magento/app/etc/local.xml ]; then rm build/magento/app/etc/local.xml; fi
     - php bin/n98-magerun install --dbHost="127.0.0.1" --dbUser="travis" --dbPass="" --dbName="magento" --installSampleData=yes --useDefaultConfigParams=yes --magentoVersion="1.9.0.1" --installationFolder="build/magento" --baseUrl="http://www.localhost.com:8080" -n
 script: php bin/phing
 cache:
