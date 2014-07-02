@@ -15,7 +15,9 @@
         "composer/installers": "~1.0"
     },
     "require-dev": {
-        "phing/phing": "*"
+        "phing/phing": "*",
+        "phpunit/phpunit": "*",
+        "satooshi/php-coveralls": "*"
     },
     "config": {
         "bin-dir": "bin"
@@ -26,6 +28,6 @@
         }
     },
     "archive": {
-        "exclude": ["build.xml"]
+        "exclude": ["build.xml","build/","phpunit.xml.dist","tests/"]
     }
 }
