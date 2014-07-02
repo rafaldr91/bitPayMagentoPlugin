@@ -4,3 +4,5 @@ bin/
 vendor/
 composer.lock
 build/logs/
+build/
+build.xml
