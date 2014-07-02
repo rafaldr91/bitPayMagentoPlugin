@@ -1,0 +1,3 @@
+inherit: true
+tools:
+    sensiolabs_security_checker: true
