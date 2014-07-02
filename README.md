@@ -5,6 +5,8 @@ BitPay Inc Magento Plugin
 
 [![Build Status](https://travis-ci.org/bitpay/magento-plugin.svg?branch=master)](https://travis-ci.org/bitpay/magento-plugin)
 
+[![Coverage Status](https://img.shields.io/coveralls/bitpay/magento-plugin.svg)](https://coveralls.io/r/bitpay/magento-plugin)
+
 # Installation
 
 ## Download
