@@ -17,7 +17,8 @@
     "require-dev": {
         "phing/phing": "*",
         "phpunit/phpunit": "*",
-        "satooshi/php-coveralls": "*"
+        "satooshi/php-coveralls": "*",
+        "n98/magerun": "*"
     },
     "config": {
         "bin-dir": "bin"
