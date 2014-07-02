@@ -28,6 +28,15 @@
         }
     },
     "archive": {
-        "exclude": ["build.xml","build/","phpunit.xml.dist","tests/"]
+        "exclude": [
+            "build.xml",
+            "build/",
+            "phpunit.xml.dist",
+            "tests/",
+            ".coveralls.yml",
+            ".gitignore",
+            ".scrutinizer.yml",
+            ".travis.yml"
+        ]
     }
 }

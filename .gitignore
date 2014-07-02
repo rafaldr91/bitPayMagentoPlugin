@@ -3,3 +3,4 @@ lib/bitpay/bp_config.php
 bin/
 vendor/
 composer.lock
+build/logs/
