@@ -34,8 +34,11 @@ $bpconfig['ssl_verifypeer'] = 1;
 $bpconfig['ssl_verifyhost'] = 2;
 
 //include custom config overrides if it exists
-try {
+try
+{
     include 'bp_config.php';
-} catch (Exception $e) {
+}
+catch (Exception $e)
+{
     // do nothing
 }

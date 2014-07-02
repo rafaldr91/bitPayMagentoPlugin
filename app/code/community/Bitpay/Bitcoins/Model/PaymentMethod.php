@@ -186,8 +186,6 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
     /**
      * @param $order
-     *
-     * @return
      */
     public function MarkOrderPaid($order)
     {
@@ -224,6 +222,9 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
     }
 
+    /**
+     * @param $order
+     */
     public function MarkOrderComplete($order)
     {
         /**
