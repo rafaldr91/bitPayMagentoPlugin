@@ -1,21 +1,15 @@
 BitPay Inc Magento Plugin
 =========================
 
-<strong>©2011-2014 BITPAY, INC.</strong>
+# Status
 
-Permission is hereby granted to any person obtaining a copy of this software
-and associated documentation for use and/or modification in association with
-the bitpay.com service.
+[![Build Status](https://travis-ci.org/bitpay/magento-plugin.svg?branch=master)](https://travis-ci.org/bitpay/magento-plugin)
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JoshuaEstes/magento-plugin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bitpay/magento-plugin/?branch=master)
 
-Bitcoin payment module for Magento Community Edition using the bitpay.com service.
+[![Code Coverage](https://scrutinizer-ci.com/g/JoshuaEstes/magento-plugin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bitpay/magento-plugin/?branch=master)
+
+[![Coverage Status](https://img.shields.io/coveralls/bitpay/magento-plugin.svg)](https://coveralls.io/r/bitpay/magento-plugin)
 
 # Installation
 
@@ -177,3 +171,21 @@ NOTE: When contacting support it will help us is you provide:
 - Updated BitPay logo in admin settings
 - Tested & validated against latest 1.9.0.1
 - Tested & validated with default one-page checkout settings
+
+# License
+
+<strong>©2011-2014 BITPAY, INC.</strong>
+
+Permission is hereby granted to any person obtaining a copy of this software
+and associated documentation for use and/or modification in association with
+the bitpay.com service.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+Bitcoin payment module for Magento Community Edition using the bitpay.com service.
