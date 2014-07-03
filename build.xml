@@ -38,6 +38,8 @@
     </target>
 
     <target name="coveralls">
-        <exec executable="bin/coveralls" passthru="true" />
+        <exec executable="bin/coveralls" passthru="true">
+            <arg value="-v" />
+        </exec>
     </target>
 </project>
