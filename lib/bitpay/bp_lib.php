@@ -122,6 +122,7 @@ function bpCreateInvoice($orderId, $price, $posData, $options = array())
     $options['orderID'] = $orderId;
     $options['price']   = $price;
 
+    $post        = array();
     $postOptions = array('orderID', 'itemDesc', 'itemCode', 'notificationEmail', 'notificationURL', 'redirectURL', 
         'posData', 'price', 'currency', 'physical', 'fullNotifications', 'transactionSpeed', 'buyerName', 
         'buyerAddress1', 'buyerAddress2', 'buyerCity', 'buyerState', 'buyerZip', 'buyerEmail', 'buyerPhone');
