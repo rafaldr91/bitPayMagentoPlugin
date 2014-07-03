@@ -3,10 +3,11 @@ php:
     - 5.5
     - 5.4
     - 5.3
+before_install:
+    - sudo apt-get install php5-xdebug
 install:
     - composer install
 before_script:
-    - sudo apt-get install php5-xdebug
     - mysql -e 'create database magento;'
     - if [ -e build/magento/app/etc/local.xml ]; then rm build/magento/app/etc/local.xml; fi
     - php bin/n98-magerun install --dbHost="127.0.0.1" --dbUser="travis" --dbPass="" --dbName="magento" --installSampleData=yes --useDefaultConfigParams=yes --magentoVersion="1.9.0.1" --installationFolder="build/magento" --baseUrl="http://www.localhost.com:8080" -n
