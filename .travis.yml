@@ -12,5 +12,5 @@ before_script:
 script: php bin/phing build-travis
 cache:
     directories:
-        - vendor/
-        - build/magento/
+        - vendor
+        - build/magento
