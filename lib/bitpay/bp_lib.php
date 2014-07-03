@@ -25,18 +25,18 @@ require_once 'bp_options.php';
 /**
  * @param string $url
  * @param string $apiKey
- * @param bool   $post
+ * @param string $post
  *
  * @return array
  */
-function bpCurl($url, $apiKey, $post = false)
+function bpCurl($url, $apiKey, $post = null)
 {
     global $bpOptions, $bpconfig;	
 
     $curl   = curl_init($url);
     $length = 0;
 
-    if ($post)
+    if (null !== $post)
     {	
         curl_setopt($curl, CURLOPT_POST, 1);
         curl_setopt($curl, CURLOPT_POSTFIELDS, $post);
