@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="bitpay/magento-plugin" default="build">
     <!--
+        Default properties
     -->
     <property file="build.properties" />
 
@@ -13,7 +14,14 @@
     <!--
         Used to run a build on Travis CI
     -->
-    <target name="build-travis" depends="lint,phpunit,coveralls">
+    <target name="build-travis" depends="prepare">
+        <parallel threadCount="3">
+            <phingcall target="lint" />
+            <phingcall target="database:create" />
+            <phingcall target="magento:install" />
+        </parallel>
+        <phingcall target="phpunit" />
+        <phingcall target="coveralls" />
     </target>
 
     <target name="clean" hidden="true">
@@ -25,7 +33,7 @@
         <mkdir dir="build/logs" />
     </target>
 
-    <target name="lint" depends="prepare">
+    <target name="lint">
         <phplint>
             <fileset dir="app/code/community/Bitpay/Bitcoins">
                 <include name="**/*.php"/>
@@ -55,7 +63,7 @@
         </exec>
     </target>
 
-    <target name="magento:install" depends="prepare">
+    <target name="magento:install">
         <exec executable="bin/n98-magerun" passthru="true" escape="true" level="debug">
             <arg value="install" />
             <arg value="-n" />
