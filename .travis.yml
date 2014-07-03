@@ -5,4 +5,8 @@ php:
     - 5.3
 install:
     - composer install
-script: php bin/phing
+script: php bin/phing -propertyfile travis.properties build-travis
+cache:
+    directories:
+        - vendor
+        - build/magento

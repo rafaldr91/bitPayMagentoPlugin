@@ -17,7 +17,8 @@
     "require-dev": {
         "phing/phing": "*",
         "phpunit/phpunit": "*",
-        "satooshi/php-coveralls": "*"
+        "satooshi/php-coveralls": "*",
+        "n98/magerun": "*"
     },
     "config": {
         "bin-dir": "bin"
@@ -29,14 +30,16 @@
     },
     "archive": {
         "exclude": [
-            "build.xml",
-            "build/",
-            "phpunit.xml.dist",
             "tests/",
             ".coveralls.yml",
+            ".gitattributes",
             ".gitignore",
             ".scrutinizer.yml",
-            ".travis.yml"
+            ".travis.yml",
+            "build.properties",
+            "build.xml",
+            "phpunit.xml.dist",
+            "travis.properties"
         ]
     }
 }

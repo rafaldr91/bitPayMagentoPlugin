@@ -1,3 +1,8 @@
 inherit: true
 tools:
+    # @see https://scrutinizer-ci.com/docs/tools/php/security-advisory-checker/
     sensiolabs_security_checker: true
+    # @see https://scrutinizer-ci.com/docs/tools/php/php-analyzer/
+    php_analyzer: true
+    # @see https://scrutinizer-ci.com/docs/tools/php/pdepend/
+    php_pdepend: true

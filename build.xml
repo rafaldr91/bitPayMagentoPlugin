@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="bitpay/magento-plugin" default="build">
+    <!--
+        Default properties
+    -->
+    <property file="build.properties" />
+
+    <!--
+        Default build for running a build locally
+    -->
+    <target name="build" depends="lint,phpunit">
+    </target>
+
+    <!--
+        Used to run a build on Travis CI
+    -->
+    <target name="build-travis" depends="prepare">
+        <parallel threadCount="3">
+            <phingcall target="lint" />
+            <phingcall target="database:create" />
+            <phingcall target="magento:install" />
+        </parallel>
+        <phingcall target="phpunit" />
+        <phingcall target="coveralls" />
+    </target>
+
     <target name="clean" hidden="true">
         <delete dir="build/logs" verbose="true" />
+        <delete file="build/magento/app/etc/local.xml" verbose="true" />
     </target>
 
     <target name="prepare" depends="clean" hidden="true">
         <mkdir dir="build/logs" />
     </target>
 
-    <target name="build" depends="lint,phpunit" />
-
-    <target name="lint" depends="prepare">
+    <target name="lint">
         <phplint>
             <fileset dir="app/code/community/Bitpay/Bitcoins">
                 <include name="**/*.php"/>
@@ -22,6 +45,38 @@
     </target>
 
     <target name="phpunit">
-        <phpunit printsummary="true" pharlocation="bin" />
+        <exec executable="bin/phpunit" passthru="true" />
+    </target>
+
+    <target name="coveralls">
+        <exec executable="bin/coveralls" passthru="true">
+            <arg value="-v" />
+        </exec>
+    </target>
+
+    <target name="database:create">
+        <exec executable="mysql" passthru="true">
+            <arg value="--user=${DB_USER}" />
+            <arg value="--password=${DB_PASS}" />
+            <arg value="-e" />
+            <arg value="create database ${DB_NAME};" />
+        </exec>
+    </target>
+
+    <target name="magento:install">
+        <exec executable="bin/n98-magerun" passthru="true" escape="true" level="debug">
+            <arg value="install" />
+            <arg value="-n" />
+            <arg value="--forceUseDb=${DB_NAME}" />
+            <arg value="--magentoVersion=${MAGENTO_VERSION}" />
+            <arg value="--installationFolder=build/magento" />
+            <arg value="--dbHost=${DB_HOST}" />
+            <arg value="--dbUser=${DB_USER}" />
+            <arg value="--dbPass=${DB_PASS}" />
+            <arg value="--dbName=${DB_NAME}" />
+            <arg value="--installSampleData=no" />
+            <arg value="--useDefaultConfigParams=yes" />
+            <arg value="--baseUrl=http://www.localhost.com" />
+        </exec>
     </target>
 </project>
