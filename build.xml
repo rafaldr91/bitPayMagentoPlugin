@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="bitpay/magento-plugin" default="build">
-    <target name="build" depends="lint,phpunit,coveralls" />
+    <!--
+        Default build for running a build locally
+    -->
+    <target name="build" depends="lint,phpunit">
+        <property file="build.properties" />
+    </target>
+
+    <!--
+        Used to run a build on Travis CI
+    -->
+    <target name="build-travis" depends="lint,phpunit,coveralls">
+        <property file="travis.properties" />
+    </target>
 
     <target name="clean" hidden="true">
         <delete dir="build/logs" verbose="true" />

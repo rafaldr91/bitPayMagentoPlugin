@@ -30,14 +30,16 @@
     },
     "archive": {
         "exclude": [
-            "build.xml",
-            "build/",
-            "phpunit.xml.dist",
             "tests/",
             ".coveralls.yml",
+            ".gitattributes",
             ".gitignore",
             ".scrutinizer.yml",
-            ".travis.yml"
+            ".travis.yml",
+            "build.properties",
+            "build.xml",
+            "phpunit.xml.dist",
+            "travis.properties"
         ]
     }
 }
