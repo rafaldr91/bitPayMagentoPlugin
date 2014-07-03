@@ -56,10 +56,10 @@
 
     <target name="database:create">
         <exec executable="mysql" passthru="true">
-            <arg value="-u" />
-            <arg value="${DB_USER}" />
+            <arg value="--user=${DB_USER}" />
+            <arg value="--password=${DB_PASS}" />
             <arg value="-e" />
-            <arg value="'create database ${DB_NAME};'" />
+            <arg value="create database ${DB_NAME};" />
         </exec>
     </target>
 
