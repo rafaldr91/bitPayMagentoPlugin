@@ -18,6 +18,7 @@
 
     <target name="clean" hidden="true">
         <delete dir="build/logs" verbose="true" />
+        <delete file="build/magento/app/etc/local.xml" verbose="true" />
     </target>
 
     <target name="prepare" depends="clean" hidden="true">
@@ -50,7 +51,24 @@
             <arg value="-u" />
             <arg value="${DB_USER}" />
             <arg value="-e" />
-            <arg value="'create database magento;'" />
+            <arg value="'create database ${DB_NAME};'" />
+        </exec>
+    </target>
+
+    <target name="magento:install" depends="prepare">
+        <exec executable="bin/n98-magerun" passthru="true" escape="true" level="debug">
+            <arg value="install" />
+            <arg value="-n" />
+            <arg value="--forceUseDb=${DB_NAME}" />
+            <arg value="--magentoVersion=${MAGENTO_VERSION}" />
+            <arg value="--installationFolder=build/magento" />
+            <arg value="--dbHost=${DB_HOST}" />
+            <arg value="--dbUser=${DB_USER}" />
+            <arg value="--dbPass=${DB_PASS}" />
+            <arg value="--dbName=${DB_NAME}" />
+            <arg value="--installSampleData=no" />
+            <arg value="--useDefaultConfigParams=yes" />
+            <arg value="--baseUrl=http://www.localhost.com" />
         </exec>
     </target>
 </project>
