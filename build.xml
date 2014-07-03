@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="bitpay/magento-plugin" default="build">
+    <target name="build" depends="lint,phpunit,coveralls" />
+
     <target name="clean" hidden="true">
         <delete dir="build/logs" verbose="true" />
     </target>
@@ -7,8 +9,6 @@
     <target name="prepare" depends="clean" hidden="true">
         <mkdir dir="build/logs" />
     </target>
-
-    <target name="build" depends="lint,phpunit" />
 
     <target name="lint" depends="prepare">
         <phplint>
@@ -23,5 +23,9 @@
 
     <target name="phpunit">
         <exec executable="bin/phpunit" passthru="true" />
+    </target>
+
+    <target name="coveralls">
+        <exec executable="bin/coveralls" passthru="true" />
     </target>
 </project>
