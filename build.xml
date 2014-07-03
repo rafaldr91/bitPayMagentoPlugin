@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="bitpay/magento-plugin" default="build">
     <!--
+    -->
+    <property file="build.properties" />
+
+    <!--
         Default build for running a build locally
     -->
     <target name="build" depends="lint,phpunit">
-        <property file="build.properties" />
     </target>
 
     <!--
         Used to run a build on Travis CI
     -->
     <target name="build-travis" depends="lint,phpunit,coveralls">
-        <property file="travis.properties" />
     </target>
 
     <target name="clean" hidden="true">
@@ -40,6 +42,15 @@
     <target name="coveralls">
         <exec executable="bin/coveralls" passthru="true">
             <arg value="-v" />
+        </exec>
+    </target>
+
+    <target name="database:create">
+        <exec executable="mysql" passthru="true">
+            <arg value="-u" />
+            <arg value="${DB_USER}" />
+            <arg value="-e" />
+            <arg value="'create database magento;'" />
         </exec>
     </target>
 </project>
