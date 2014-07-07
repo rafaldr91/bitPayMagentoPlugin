@@ -28,3 +28,4 @@ composer.lock
 build/logs/
 build/
 build.xml
+ocular.phar
