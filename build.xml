@@ -46,7 +46,10 @@
             <phingcall target="magento:install" />
         </parallel>
         <phingcall target="phpunit" />
-        <phingcall target="coveralls" />
+        <parallel threadCount="2">
+            <phingcall target="coveralls" />
+            <phingcall target="ocular:code-coverage:upload" />
+        </parallel>
     </target>
 
     <target name="clean" hidden="true">
@@ -79,6 +82,27 @@
         </exec>
     </target>
 
+    <target name="scrutinizer:ocular:download">
+        <if>
+            <not>
+                <available file="ocular.phar" />
+            </not>
+            <then>
+                <exec executable="wget" passthru="true">
+                    <arg value="https://scrutinizer-ci.com/ocular.phar" />
+                </exec>
+            </then>
+        </if>
+    </target>
+
+    <target name="ocular:code-coverage:upload" depends="scrutinizer:ocular:download">
+        <exec executable="ocular.phar">
+            <arg value="code-coverage:upload" />
+            <arg value="--format=php-clover" />
+            <arg value="build/logs/clover.xml" />
+        </exec>
+    </target>
+
     <target name="database:create">
         <exec executable="mysql" passthru="true">
             <arg value="--user=${DB_USER}" />
@@ -89,7 +113,7 @@
     </target>
 
     <target name="magento:install">
-        <exec executable="bin/n98-magerun" passthru="true" escape="true" level="debug">
+        <exec executable="bin/n98-magerun" passthru="true">
             <arg value="install" />
             <arg value="-n" />
             <arg value="--forceUseDb=${DB_NAME}" />
