@@ -319,7 +319,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     {
         try
         {
-            $order->setState(Mage_Sales_Model_Order::STATE_CANCELLED, true)->save();
+            $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true)->save();
         }
         catch (Exception $e)
         {
