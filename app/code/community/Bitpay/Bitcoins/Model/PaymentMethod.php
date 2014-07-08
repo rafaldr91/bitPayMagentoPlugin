@@ -145,10 +145,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
-     * @param Varien_Object $payment
-     * @param string $amount
+     * Authorize payment method
      *
-     * @return
+     * @param Varien_Object $payment
+     * @param float         $amount
+     *
+     * @return Bitpay_Bitcoins_Model_PaymentMethod
      */
     public function authorize(Varien_Object $payment, $amount)
     {
