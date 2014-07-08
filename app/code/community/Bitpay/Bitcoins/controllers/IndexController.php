@@ -50,63 +50,63 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
         if (is_string($invoice))
         {
             Mage::log("bitpay callback error: $invoice", Zend_Log::ERR, 'bitpay.log');
+            throw new Exception('Bitpay callback error:' . $invoice);
+        }
+
+        // get the order
+        if (isset($invoice['posData']['quoteId']))
+        {
+            $quoteId = $invoice['posData']['quoteId'];
+            $order   = Mage::getModel('sales/order')->load($quoteId, 'quote_id');
+        }
+        elseif (isset($invoice['posData']['orderId']))
+        {
+            $orderId = $invoice['posData']['orderId'];
+            $order   = Mage::getModel('sales/order')->loadByIncrementId($orderId);
         }
         else
         {
-            // get the order
-            if (isset($invoice['posData']['quoteId']))
-            {
-                $quoteId = $invoice['posData']['quoteId'];
-                $order   = Mage::getModel('sales/order')->load($quoteId, 'quote_id');
-            }
-            else
-            {
-                $orderId = $invoice['posData']['orderId'];
-                $order   = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-            }
+            Mage::log('Invalid posData, does not contain quoteId or orderId.', Zend_Log::ERR, 'bitpay.log');
+            throw new Exception('Invalid Bitpay IPN received.');
+        }
 
-            // save the ipn so that we can find it when the user clicks "Place Order"
-            Mage::getModel('Bitcoins/ipn')->Record($invoice); 
+        // save the ipn so that we can find it when the user clicks "Place Order"
+        Mage::getModel('Bitcoins/ipn')->Record($invoice);
 
-            // update the order if it exists already
-            if ($order->getId())
-            {
-                switch($invoice['status'])
-                {
+        if (!$order->getId())
+        {
+            Mage::log('Order object does not contain an ID', Zend_Log::ERR, 'bitpay.log');
+            throw new Exception('Order object does not contain an ID');
+        }
 
-                case 'paid':
-                    // Mark paid if there is an outstanding total
-                    if ($order->getTotalDue() > 0)
-                    {
-                        $method = Mage::getModel('Bitcoins/paymentMethod');
-                        $method->MarkOrderPaid($order);
-                    }
-                    else
-                    {
-                        Mage::log('Received a PAID notification from BitPay but there is nothing due on this invoice. Ignoring this IPN.', null, 'bitpay.log');
-                    }
-                    break;
+        // update the order if it exists already
+        // BitPay Statuses
+        // new, paid, confirmed, complete, expired, invalid
+        Mage::log('Received IPN with "' . $invoice['status'] . '" status', Zend_Log::DEBUG, 'bitpay.log');
+        switch($invoice['status'])
+        {
 
-                case 'confirmed':
-                case 'complete':
-                    // Mark confirmed/complete if the order has been paid
-                    if ($order->getTotalDue() <= 0)
-                    {
-                        $method = Mage::getModel('Bitcoins/paymentMethod');
-                        $method->MarkOrderComplete($order);
-                    }
-                    else
-                    {
-                        Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, 'bitpay.log');
-                    }
-                    break;
+        // Map to Magento state Processing
+        case 'paid':
+            // Mark paid if there is an outstanding total
+            $method = Mage::getModel('Bitcoins/paymentMethod');
+            $method->MarkOrderPaid($order);
+            break;
 
-                case 'invalid':
-                    $method = Mage::getModel('Bitcoins/paymentMethod');
-                    $method->MarkOrderCancelled($order);
-                    break;
-                }
-            }
+        // Map to Magento status Complete
+        case 'confirmed':
+        case 'complete':
+            // Mark confirmed/complete if the order has been paid
+            $method = Mage::getModel('Bitcoins/paymentMethod');
+            $method->MarkOrderComplete($order);
+            //Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, 'bitpay.log');
+            break;
+
+        // Map to Magento State Closed
+        case 'invalid':
+            $method = Mage::getModel('Bitcoins/paymentMethod');
+            $method->MarkOrderCancelled($order);
+            break;
         }
     }
 }

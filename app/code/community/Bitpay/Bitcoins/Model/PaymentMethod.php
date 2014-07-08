@@ -24,9 +24,6 @@
  * THE SOFTWARE.
  */
 
-/**
- * Our test CC module adapter
- */
 class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
 {
 
@@ -123,18 +120,14 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function canUseCheckout()
     {
-        $secret = Mage::getStoreConfig('payment/Bitcoins/api_key');
-
-        if (!$secret or !strlen($secret))
+        if (!$this->isApiKeyConfigured())
         {
             Mage::log('Bitpay/Bitcoins: API key not entered', Zend_Log::ERR, 'bitpay.log');
 
             return false;
         }
 
-        $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
-
-        if (!$speed or !strlen($speed))
+        if (!$this->isTransactionSpeedConfigured())
         {
             Mage::log('Bitpay/Bitcoins: Transaction Speed invalid', Zend_Log::ERR, 'bitpay.log');
 
@@ -145,10 +138,36 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
-     * @param Varien_Object $payment
-     * @param string $amounf
+     * Returns true if the merchant has set their api key
      *
-     * @return
+     * @return boolean
+     */
+    public function isApiKeyConfigured()
+    {
+        $key = Mage::getStoreConfig('payment/Bitcoins/api_key');
+
+        return !empty($key);
+    }
+
+    /**
+     * Returns true if Transaction Speed has been configured
+     *
+     * @return boolean
+     */
+    public function isTransactionSpeedConfigured()
+    {
+        $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
+
+        return !empty($speed);
+    }
+
+    /**
+     * Authorize payment method
+     *
+     * @param Varien_Object $payment
+     * @param float         $amount
+     *
+     * @return Bitpay_Bitcoins_Model_PaymentMethod
      */
     public function authorize(Varien_Object $payment, $amount)
     {
@@ -163,7 +182,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
-     * @param $payment
+     * @param Varien_Object $payment
      *
      * @return Bitpay_Bitcoins_Model_PaymentMethod
      */
@@ -190,6 +209,37 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
+     * @param Varien_Object $order
+     */
+    public function invoiceOrder($order)
+    {
+        try
+        {
+            if (!$order->canInvoice())
+            {
+                Mage::throwException(Mage::helper('core')->__('Cannot create an invoice.'));
+            }
+
+            $invoice = $order->prepareInvoice()
+                ->setTransactionId(1)
+                ->addComment('Invoiced automatically by Bitpay/Bitcoins/controllers/IndexController.php')
+                ->register()
+                ->pay();
+
+            $transactionSave = Mage::getModel('core/resource_transaction')
+                ->addObject($invoice)
+                ->addObject($invoice->getOrder());
+
+            $transactionSave->save();
+        }
+        catch (Exception $e)
+        {
+            Mage::log($e->getMessage(), Zend_Log::EMERG, 'bitpay.log');
+            Mage::logException($e);
+        }
+    }
+
+    /**
      * @param $order
      */
     public function MarkOrderPaid($order)
@@ -200,25 +250,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         {
             if (!count($order->getInvoiceCollection()))
             {
-                try
-                {
-                    $invoice = $order->prepareInvoice()
-                        ->setTransactionId(1)
-                        ->addComment('Invoiced automatically by Bitpay/Bitcoins/controllers/IndexController.php')
-                        ->register()
-                        ->pay();
-
-                    $transactionSave = Mage::getModel('core/resource_transaction')
-                        ->addObject($invoice)
-                        ->addObject($invoice->getOrder());
-
-                    $transactionSave->save();
-                }
-                catch (Exception $e)
-                {
-                    Mage::log($e->getMessage(), Zend_Log::EMERG, 'bitpay.log');
-                    Mage::logException($e);
-                }
+                $this->invoiceOrder($order);
             }
         }
         else
@@ -232,11 +264,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function MarkOrderComplete($order)
     {
-        /**
-         * The order has already been invoiced and has already been paid, this
-         * code leads to having payments applied multiple times.
-         *
-        if ($order->getTotalDue() <= 0)
+        if ($order->getTotalDue() >= 0 && $order->canInvoice())
         {
             if ($order->hasInvoices())
             {
@@ -255,11 +283,6 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                 }
             }
         }
-        else
-        {
-            Mage::log('MarkOrderComplete called but order '. $order->getId() .' has an outstanding balance that has not been paid.', Zend_Log::WARN, 'bitpay.log');
-        }
-         */
 
         // If the $_bpCreateShipment option is set to true above, this code will
         // programmatically create a shipment for you.  By design, this will mark
