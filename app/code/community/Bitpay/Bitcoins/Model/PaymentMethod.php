@@ -245,6 +245,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     public function MarkOrderPaid($order)
     {
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
+        //Mage::log($order->getData(), null, 'bitpay.log');
 
         if ($order->getTotalDue() > 0)
         {
@@ -264,7 +265,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function MarkOrderComplete($order)
     {
-        if ($order->getTotalDue() >= 0)
+        if ($order->getTotalDue() >= 0 && $order->canInvoice())
         {
             if ($order->hasInvoices())
             {
@@ -282,10 +283,6 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                     }
                 }
             }
-        }
-        else
-        {
-            Mage::log('MarkOrderComplete called but order '. $order->getId() .' has an outstanding balance that has not been paid.', Zend_Log::WARN, 'bitpay.log');
         }
 
         // If the $_bpCreateShipment option is set to true above, this code will

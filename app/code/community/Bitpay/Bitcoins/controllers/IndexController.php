@@ -53,6 +53,8 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
             throw new Exception('Bitpay callback error:' . $invoice);
         }
 
+        Mage::log($invoice, null, 'bitpay.log');
+
         // get the order
         if (isset($invoice['posData']['quoteId']))
         {
@@ -89,30 +91,17 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
         // Map to Magento state Processing
         case 'paid':
             // Mark paid if there is an outstanding total
-            if ($order->getTotalDue() > 0)
-            {
-                $method = Mage::getModel('Bitcoins/paymentMethod');
-                $method->MarkOrderPaid($order);
-            }
-            else
-            {
-                Mage::log('Received a PAID notification from BitPay but there is nothing due on this invoice. Ignoring this IPN.', Zend_Log::INFO, 'bitpay.log');
-            }
+            $method = Mage::getModel('Bitcoins/paymentMethod');
+            $method->MarkOrderPaid($order);
             break;
 
         // Map to Magento status Complete
         case 'confirmed':
         case 'complete':
             // Mark confirmed/complete if the order has been paid
-            if ($order->getTotalDue() <= 0)
-            {
-                $method = Mage::getModel('Bitcoins/paymentMethod');
-                $method->MarkOrderComplete($order);
-            }
-            else
-            {
-                Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, 'bitpay.log');
-            }
+            $method = Mage::getModel('Bitcoins/paymentMethod');
+            $method->MarkOrderComplete($order);
+            //Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, 'bitpay.log');
             break;
 
         // Map to Magento State Closed
