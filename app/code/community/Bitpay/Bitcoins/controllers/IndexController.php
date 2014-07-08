@@ -66,7 +66,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
         }
         else
         {
-            Mage::log('Invalid posData, does not contain quoteId or orderId.', Zend_Log::Err, 'bitpay.log');
+            Mage::log('Invalid posData, does not contain quoteId or orderId.', Zend_Log::ERR, 'bitpay.log');
             throw new Exception('Invalid Bitpay IPN received.');
         }
 
@@ -75,7 +75,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
 
         if (!$order->getId())
         {
-            Mage::log('Order object does not contain an ID', Zend_Log::Err, 'bitpay.log');
+            Mage::log('Order object does not contain an ID', Zend_Log::ERR, 'bitpay.log');
             throw new Exception('Order object does not contain an ID');
         }
 
