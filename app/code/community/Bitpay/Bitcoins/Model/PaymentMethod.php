@@ -24,9 +24,6 @@
  * THE SOFTWARE.
  */
 
-/**
- * Our test CC module adapter
- */
 class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstract
 {
 
@@ -234,11 +231,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function MarkOrderComplete($order)
     {
-        /**
-         * The order has already been invoiced and has already been paid, this
-         * code leads to having payments applied multiple times.
-         *
-        if ($order->getTotalDue() <= 0)
+        if ($order->getTotalDue() >= 0)
         {
             if ($order->hasInvoices())
             {
@@ -261,7 +254,6 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         {
             Mage::log('MarkOrderComplete called but order '. $order->getId() .' has an outstanding balance that has not been paid.', Zend_Log::WARN, 'bitpay.log');
         }
-         */
 
         // If the $_bpCreateShipment option is set to true above, this code will
         // programmatically create a shipment for you.  By design, this will mark
