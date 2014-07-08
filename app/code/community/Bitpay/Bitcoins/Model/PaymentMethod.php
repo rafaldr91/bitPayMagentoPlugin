@@ -146,7 +146,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
     /**
      * @param Varien_Object $payment
-     * @param string $amounf
+     * @param string $amount
      *
      * @return
      */
@@ -163,7 +163,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
-     * @param $payment
+     * @param Varien_Object $payment
      *
      * @return Bitpay_Bitcoins_Model_PaymentMethod
      */

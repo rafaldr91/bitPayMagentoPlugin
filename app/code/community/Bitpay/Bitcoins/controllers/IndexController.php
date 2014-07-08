@@ -69,11 +69,14 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
             Mage::getModel('Bitcoins/ipn')->Record($invoice); 
 
             // update the order if it exists already
+            // BitPay Statuses
+            // new, paid, confirmed, complete, expired, invalid
             if ($order->getId())
             {
                 switch($invoice['status'])
                 {
 
+                // Map to Magento state Processing
                 case 'paid':
                     // Mark paid if there is an outstanding total
                     if ($order->getTotalDue() > 0)
@@ -83,10 +86,11 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
                     }
                     else
                     {
-                        Mage::log('Received a PAID notification from BitPay but there is nothing due on this invoice. Ignoring this IPN.', null, 'bitpay.log');
+                        Mage::log('Received a PAID notification from BitPay but there is nothing due on this invoice. Ignoring this IPN.', Zend_Log::INFO, 'bitpay.log');
                     }
                     break;
 
+                // Map to Magento status Complete
                 case 'confirmed':
                 case 'complete':
                     // Mark confirmed/complete if the order has been paid
@@ -101,6 +105,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
                     }
                     break;
 
+                // Map to Magento State Closed
                 case 'invalid':
                     $method = Mage::getModel('Bitcoins/paymentMethod');
                     $method->MarkOrderCancelled($order);

@@ -65,7 +65,8 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract
      *
      * @return boolean
      */
-    function GetStatusReceived($quoteId, $statuses) {
+    function GetStatusReceived($quoteId, $statuses)
+    {
         if (!$quoteId)
         {
             return false;
