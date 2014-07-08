@@ -120,14 +120,14 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function canUseCheckout()
     {
-        if ($this->isApiKeyConfigured())
+        if (!$this->isApiKeyConfigured())
         {
             Mage::log('Bitpay/Bitcoins: API key not entered', Zend_Log::ERR, 'bitpay.log');
 
             return false;
         }
 
-        if ($this->isTransactionSpeedConfigured())
+        if (!$this->isTransactionSpeedConfigured())
         {
             Mage::log('Bitpay/Bitcoins: Transaction Speed invalid', Zend_Log::ERR, 'bitpay.log');
 
