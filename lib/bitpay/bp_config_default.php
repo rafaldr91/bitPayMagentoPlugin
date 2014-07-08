@@ -26,7 +26,7 @@
  
 global $bpconfig;
 
-$bpconfig['host']        = "test.bitpay.com";
+$bpconfig['host']        = "bitpay.com";
 $bpconfig['port']        = 443;
 $bpconfig['hostAndPort'] = $bpconfig['host'];
 

@@ -53,8 +53,6 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
             throw new Exception('Bitpay callback error:' . $invoice);
         }
 
-        Mage::log($invoice, null, 'bitpay.log');
-
         // get the order
         if (isset($invoice['posData']['quoteId']))
         {

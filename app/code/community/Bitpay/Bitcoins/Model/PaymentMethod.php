@@ -245,7 +245,6 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     public function MarkOrderPaid($order)
     {
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
-        //Mage::log($order->getData(), null, 'bitpay.log');
 
         if ($order->getTotalDue() > 0)
         {
