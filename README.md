@@ -9,8 +9,6 @@ BitPay Inc Magento Plugin
 
 [![Code Coverage](https://scrutinizer-ci.com/g/bitpay/magento-plugin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bitpay/magento-plugin/?branch=master)
 
-[![Coverage Status](https://img.shields.io/coveralls/bitpay/magento-plugin.svg)](https://coveralls.io/r/bitpay/magento-plugin)
-
 # Installation
 
 ## Download
