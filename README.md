@@ -5,10 +5,6 @@ BitPay Inc Magento Plugin
 
 [![Build Status](https://travis-ci.org/bitpay/magento-plugin.svg?branch=master)](https://travis-ci.org/bitpay/magento-plugin)
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/bitpay/magento-plugin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/bitpay/magento-plugin/?branch=master)
-
-[![Code Coverage](https://scrutinizer-ci.com/g/bitpay/magento-plugin/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/bitpay/magento-plugin/?branch=master)
-
 # Installation
 
 ## Download
