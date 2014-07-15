@@ -15,10 +15,15 @@
         "composer/installers": "~1.0"
     },
     "require-dev": {
+        "n98/magerun": "*",
+        "phpmd/phpmd": "*",
+        "phpdocumentor/phpdocumentor": "*",
         "phing/phing": "*",
+        "pdepend/pdepend" : "1.1.0",
+        "squizlabs/php_codesniffer": "*",
         "phpunit/phpunit": "*",
-        "satooshi/php-coveralls": "*",
-        "n98/magerun": "*"
+        "phploc/phploc": "*",
+        "phpunit/phpunit-skeleton-generator": "*"
     },
     "config": {
         "bin-dir": "bin"
@@ -31,15 +36,11 @@
     "archive": {
         "exclude": [
             "tests/",
-            ".coveralls.yml",
             ".gitattributes",
             ".gitignore",
-            ".scrutinizer.yml",
             ".travis.yml",
-            "build.properties",
-            "build.xml",
-            "phpunit.xml.dist",
-            "travis.properties"
+            "build/",
+            "build.xml"
         ]
     }
 }
