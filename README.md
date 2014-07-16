@@ -1,4 +1,4 @@
-BitPay Inc Magento Plugin
+bitpay/magento-plugin
 =========================
 
 # Status
@@ -114,25 +114,27 @@ The order status in the admin panel will be "Processing" if payment has been con
 Note: This extension does not provide a means of automatically pulling a current BTC
 exchange rate for presenting BTC prices to shoppers.
 
+# Support
+
+## BitPay Support
+
+* [GitHub Issues](https://github.com/bitpay/magento-plugin/issues)
+  * Open an issue if you are having issues with this plugin.
+* [Support](https://support.bitpay.com)
+  * BitPay merchant support documentation
+
+## Magento Support
+
+* [Homepage](http://magento.com)
+* [Documentation](http://docs.magentocommerce.com)
+* [Support Forums](https://www.magentocommerce.com/support/ce/)
+
 # Troubleshooting
-The official BitPay support website should always be your first reference for
-troubleshooting any problems you may encounter: https://support.bitpay.com
 
-The official Magento Community Edition support website might also be helpful
-if the problem you are experiencing is not directly related to the payment
-plugin: https://www.magentocommerce.com/support/ce/
-
-<strong>Other troubleshooting tips:</strong>
-
-1. Ensure a valid SSL certificate is installed on your server. Also ensure your root CA cert is
-   updated. If your CA cert is not current, you will see curl SSL verification errors.
-2. Verify that your web server is not blocking POSTs from servers it may not recognize. Double
-   check this on your firewall as well, if one is being used.
-3. Check the `bitpay.log` file for any errors during BitPay payment attempts. If you contact BitPay
-   support, they will ask to see the log file to help diagnose the problem.  The log file will be found 
-   inside your Magento's `var/log/` directory.
-4. Check the version of this plugin against the official plugin repository to ensure you are using
-   the latest version. Your issue might have been addressed in a newer version!
+1. Ensure a valid SSL certificate is installed on your server. Also ensure your root CA cert is updated. If your CA cert is not current, you will see curl SSL verification errors.
+2. Verify that your web server is not blocking POSTs from servers it may not recognize. Double check this on your firewall as well, if one is being used.
+3. Check the `bitpay.log` file for any errors during BitPay payment attempts. If you contact BitPay support, they will ask to see the log file to help diagnose the problem.  The log file will be found inside your Magento's `var/log/` directory.
+4. Check the version of this plugin against the official plugin repository to ensure you are using the latest version. Your issue might have been addressed in a newer version!
 5. If all else fails, send an email describing your issue *in detail* to support@bitpay.com
 
 NOTE: When contacting support it will help us is you provide:
@@ -141,30 +143,6 @@ NOTE: When contacting support it will help us is you provide:
 * Some configuration settings such as:
   * Transaction Speed
   * Set order complete with "complete" IPN
-
-# Change Log
-<strong>Version 1</strong><br />
-- Initial version, tested against Magento 1.6.0.0
-
-<strong>Version 2</strong><br />
-- Now supports API keys instead of SSL files.  Tested against 1.7.0.2.
- 
-<strong>Version 3</strong><br />
-- Now gives the option to show an iframe on the checkout page instead of redirecting to bitpay.com.
-
-<strong>Version 4</strong><br />
-- Improved README documentation.
-- Additional testing performed against 1.8.1.0 and installation instructions updated to reflect differences.
-- Added parameter to automatically create a shipment and mark orders complete (off by default).
-- Version incremented, other bug fixes and enhancements (see commit notes).
-
-<strong>Version 5</strong><br />
-- Added new HTTP header for version tracking
-
-<strong>Version 6</strong></br >
-- Updated BitPay logo in admin settings
-- Tested & validated against latest 1.9.0.1
-- Tested & validated with default one-page checkout settings
 
 # License
 
