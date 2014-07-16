@@ -144,6 +144,10 @@ NOTE: When contacting support it will help us is you provide:
   * Transaction Speed
   * Set order complete with "complete" IPN
 
+# Contribute
+
+To contribute to this project, please fork and submit a pull request.
+
 # License
 
 The MIT License (MIT)
