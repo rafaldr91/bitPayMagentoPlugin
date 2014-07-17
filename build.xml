@@ -48,7 +48,7 @@
     <!--
         Build API and other documentation
     -->
-    <target name="build-api-docs" depends="prepare"
+    <target name="build-api-docs"
         description="Generates API docs for the project">
         <delete dir="${phpdoc.target}" verbose="true" />
         <exec executable="${project.bindir}/phpdoc" passthru="true">
