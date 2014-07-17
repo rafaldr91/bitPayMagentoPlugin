@@ -11,6 +11,12 @@
         "issues": "https://github.com/bitpay/magento-plugin/issues",
         "source": "https://github.com/bitpay/magento-plugin"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/colinmollenhour/modman.git"
+        }    
+    ],
     "require": {
         "composer/installers": "~1.0"
     },

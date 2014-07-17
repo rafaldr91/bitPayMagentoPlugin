@@ -26,6 +26,7 @@ lib/bitpay/bp_config.php
 /build/cache/
 /build/docs/
 /build/logs/
+/build/magento/
 /vendor/
 composer.lock
 composer.phar

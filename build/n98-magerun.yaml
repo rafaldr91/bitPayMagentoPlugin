@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 # 
-# Copyright (c) 2011-2014 BitPay
+# Copyright (c) 2011-2014 BitPay LLC
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -19,16 +19,10 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-language: php
-php:
-    - 5.5
-    - 5.4
-    - 5.3
-install:
-    - composer install
-script: ./bin/phing -propertyfile build/travis.properties build-travis
-cache:
-    directories:
-        - build/cache/
-        - build/magento/
-        - vendor/
+commands:
+    N98\Magento\Command\Installer\InstallCommand:
+        installation:
+            defaults:
+                currency: USD
+                locale:   en_US
+                timezone: America/New_York

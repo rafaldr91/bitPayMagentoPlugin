@@ -27,7 +27,7 @@
 <phpunit
     backupGlobals               = "false"
     backupStaticAttributes      = "false"
-    bootstrap                   = "../tests/bootstrap.php"
+    bootstrap                   = "magento/app/code/community/Bitpay/Bitcoins/tests/bootstrap.php"
     colors                      = "true"
     convertErrorsToExceptions   = "true"
     convertNoticesToExceptions  = "true"
@@ -39,14 +39,17 @@
 
     <testsuites>
         <testsuite name="bitpay/magento-plugin Test Suite">
-            <directory>tests/</directory>
+            <directory>magento/app/code/community/Bitpay/Bitcoins/tests/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist>
-            <directory>app/</directory>
-            <directory>lib/</directory>
+            <directory>magento/app/code/community/Bitpay/Bitcoins/</directory>
+            <directory>magento/lib/bitpay</directory>
+            <exclude>
+                <directory>magento/app/code/community/Bitpay/Bitcoins/tests</directory>
+            </exclude>
         </whitelist>
     </filter>
 
