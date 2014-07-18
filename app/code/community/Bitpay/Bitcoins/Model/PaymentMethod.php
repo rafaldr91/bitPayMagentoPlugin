@@ -122,14 +122,14 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     {
         if (!$this->isApiKeyConfigured())
         {
-            Mage::log('Bitpay/Bitcoins: API key not entered', Zend_Log::ERR, 'bitpay.log');
+            Mage::log('Bitpay/Bitcoins: API key not entered', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
 
             return false;
         }
 
         if (!$this->isTransactionSpeedConfigured())
         {
-            Mage::log('Bitpay/Bitcoins: Transaction Speed invalid', Zend_Log::ERR, 'bitpay.log');
+            Mage::log('Bitpay/Bitcoins: Transaction Speed invalid', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
 
             return false;
         }
@@ -195,7 +195,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         {
             // This is the error that is displayed to the customer during checkout.
             Mage::throwException("Order not paid for.  Please pay first and then Place your Order.");
-            Mage::log('Order not paid for. Please pay first and then Place Your Order.', Zend_Log::CRIT, 'bitpay.log');
+            Mage::log('Order not paid for. Please pay first and then Place Your Order.', Zend_Log::CRIT, Mage::helper('bitpay')->getLogFile());
         }
         else if (!$ipn->GetQuoteComplete($quoteId))
         {
@@ -234,7 +234,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
         catch (Exception $e)
         {
-            Mage::log($e->getMessage(), Zend_Log::EMERG, 'bitpay.log');
+            Mage::log($e->getMessage(), Zend_Log::EMERG, Mage::helper('bitpay')->getLogFile());
             Mage::logException($e);
         }
     }
@@ -255,7 +255,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
         else
         {
-            Mage::log('MarkOrderPaid called but order '. $order->getId() .' does not have a balance due.', Zend_Log::WARN, 'bitpay.log');
+            Mage::log('MarkOrderPaid called but order '. $order->getId() .' does not have a balance due.', Zend_Log::WARN, Mage::helper('bitpay')->getLogFile());
         }
     }
 
@@ -277,7 +277,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
                     }
                     catch (Exception $e)
                     {
-                        Mage::log($e->getMessage(), Zend_Log::EMERG, 'bitpay.log');
+                        Mage::log($e->getMessage(), Zend_Log::EMERG, Mage::helper('bitpay')->getLogFile());
                         Mage::logException($e);
                     }
                 }
@@ -304,7 +304,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             }
             catch (Exception $e)
             {
-                Mage::log('Error creating shipment for order '. $order->getId() .'.', Zend_Log::ERR, 'bitpay.log');
+                Mage::log('Error creating shipment for order '. $order->getId() .'.', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
                 Mage::logException($e);
             }
         }
@@ -329,7 +329,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
         catch (Exception $e)
         {
-            Mage::log($e->getMessage(), Zend_Log::EMERG, 'bitpay.log');
+            Mage::log($e->getMessage(), Zend_Log::EMERG, Mage::helper('bitpay')->getLogFile());
             Mage::logException($e);
         }
 
@@ -346,7 +346,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         }
         catch (Exception $e)
         {
-            Mage::log('Could not cancel order '. $order->getId() .'.', null, 'bitpay.log');
+            Mage::log('Could not cancel order '. $order->getId() .'.', null, Mage::helper('bitpay')->getLogFile());
             Mage::logException($e);
         }
     }
@@ -418,8 +418,8 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
 
         if (array_key_exists('error', $invoice))
         {
-            Mage::log('Error creating bitpay invoice', Zend_Log::CRIT, 'bitpay.log');
-            Mage::log($invoice['error'], Zend_Log::CRIT, 'bitpay.log');
+            Mage::log('Error creating bitpay invoice', Zend_Log::CRIT, Mage::helper('bitpay')->getLogFile());
+            Mage::log($invoice['error'], Zend_Log::CRIT, Mage::helper('bitpay')->getLogFile());
             Mage::throwException("Error creating BitPay invoice.  Please try again or use another payment option.");
         }
         else
@@ -458,7 +458,7 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
         $quote = Mage::getModel('sales/quote')->load($quoteId, 'entity_id');
         if (!$quote)
         {
-            Mage::log('getQuoteTimestamp: quote not found', Zend_Log::ERR, 'bitpay.log');
+            Mage::log('getQuoteTimestamp: quote not found', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
 
             return false;
         }

@@ -58,6 +58,12 @@
 			</bitcoins>
 		</blocks>
 
+        <helpers>
+            <bitpay>
+                <class>Bitpay_Bitcoins_Helper</class>
+            </bitpay>
+        </helpers>
+
 		<models>
 			<Bitcoins>
 				<class>Bitpay_Bitcoins_Model</class>
