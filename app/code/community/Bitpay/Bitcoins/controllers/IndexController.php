@@ -43,6 +43,12 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
      * bitpay's IPN lands here
      */
     public function indexAction() {
+        Mage::log(
+            sprintf('Incoming IPN from bitpay'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         require Mage::getBaseDir('lib').'/bitpay/bp_lib.php';
         $apiKey  = Mage::getStoreConfig('payment/Bitcoins/api_key');
         $invoice = bpVerifyNotification($apiKey);

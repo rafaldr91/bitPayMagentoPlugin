@@ -109,6 +109,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function canUseForCurrency($currencyCode)
     {
+        Mage::log(
+            sprintf('Checking if can use currency "%s"', $currency),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         $currencies = Mage::getStoreConfig('payment/Bitcoins/currencies');
         $currencies = array_map('trim', explode(',', $currencies));
 
@@ -171,6 +177,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function authorize(Varien_Object $payment, $amount)
     {
+        Mage::log(
+            sprintf('Authorizing payment'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         if (!Mage::getStoreConfig('payment/Bitcoins/fullscreen'))
         {
             return $this->CheckForPayment($payment);
@@ -188,6 +200,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function CheckForPayment($payment)
     {
+        Mage::log(
+            sprintf('Checking for payment'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         $quoteId = $payment->getOrder()->getQuoteId();
         $ipn     = Mage::getModel('Bitcoins/ipn');
 
@@ -213,6 +231,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function invoiceOrder($order)
     {
+        Mage::log(
+            sprintf('Invoicing order'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         try
         {
             if (!$order->canInvoice())
@@ -244,6 +268,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function MarkOrderPaid($order)
     {
+        Mage::log(
+            sprintf('Marking order paid'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true)->save();
 
         if ($order->getTotalDue() > 0)
@@ -264,6 +294,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function MarkOrderComplete($order)
     {
+        Mage::log(
+            sprintf('Marking order paid'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         if ($order->getTotalDue() >= 0 && $order->canInvoice())
         {
             if ($order->hasInvoices())
@@ -340,6 +376,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function MarkOrderCancelled($order)
     {
+        Mage::log(
+            sprintf('Marking order cancelled'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         try
         {
             $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true)->save();
@@ -360,6 +402,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function ExtractAddress($address)
     {
+        Mage::log(
+            sprintf('Extracting addess'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         $options              = array();
         $options['buyerName'] = $address->getName();
 
@@ -396,6 +444,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function CreateInvoiceAndRedirect($payment, $amount)
     {
+        Mage::log(
+            sprintf('Creating invoice and redirecting'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         include Mage::getBaseDir('lib').'/bitpay/bp_lib.php';
 
         $apiKey  = Mage::getStoreConfig('payment/Bitcoins/api_key');
@@ -436,6 +490,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function getOrderPlaceRedirectUrl()
     {
+        Mage::log(
+            sprintf('Getting order place redirect url'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         if (Mage::getStoreConfig('payment/Bitcoins/fullscreen'))
         {
             return Mage::getSingleton('customer/session')->getRedirectUrl();
@@ -455,6 +515,12 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
      */
     public function getQuoteHash($quoteId)
     {
+        Mage::log(
+            sprintf('Getting the quote hash'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         $quote = Mage::getModel('sales/quote')->load($quoteId, 'entity_id');
         if (!$quote)
         {
