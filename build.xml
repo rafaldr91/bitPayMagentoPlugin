@@ -36,20 +36,19 @@
     <target name="build" depends="prepare"
         description="Runs a full build">
         <phingcall target="lint" />
+        <phingcall target="magento:install" />
         <phingcall target="phpunit" />
-        <parallel threadCount="5">
-            <phingcall target="phpcs" />
-            <phingcall target="phpmd" />
-            <phingcall target="phploc" />
-            <phingcall target="pdepend" />
-            <phingcall target="build-api-docs" />
-        </parallel>
+        <phingcall target="phpcs" />
+        <phingcall target="phpmd" />
+        <phingcall target="phploc" />
+        <phingcall target="pdepend" />
+        <phingcall target="build-api-docs" />
     </target>
 
     <!--
         Build API and other documentation
     -->
-    <target name="build-api-docs" depends="prepare"
+    <target name="build-api-docs"
         description="Generates API docs for the project">
         <delete dir="${phpdoc.target}" verbose="true" />
         <exec executable="${project.bindir}/phpdoc" passthru="true">
@@ -196,5 +195,73 @@
             <arg line="--ignore=${phpcs.ignore}" />
             <arg path="${phpcs.source}" />
         </exec>
+    </target>
+
+    <!--
+        This target will copy over the magerun config and will install magento
+        in the build directory. It will then symlink the plugin so that tests
+        can be ran.
+    -->
+    <target name="magento:install">
+        <delete dir="build/magento" includeemptydirs="true" />
+        <mkdir dir="build/magento/app/etc/" />
+        <copy file="build/n98-magerun.yaml" tofile="build/magento/app/etc/n98-magerun.yaml" />
+        <exec executable="bin/n98-magerun" passthru="true">
+            <arg value="install" />
+            <arg value="-n" />
+            <arg value="-vvv" />
+            <arg value="--magentoVersion=${magento.version}" />
+            <arg value="--installationFolder=build/magento" />
+            <arg value="--dbHost=${db.host}" />
+            <arg value="--dbUser=${db.user}" />
+            <arg value="--dbPass=${db.pass}" />
+            <arg value="--dbName=${db.name}" />
+            <arg value="--installSampleData=no" />
+            <arg value="--useDefaultConfigParams=yes" />
+            <arg value="--baseUrl=${magento.baseurl}" />
+        </exec>
+        <exec executable="bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="config:set" />
+            <arg value="dev/template/allow_symlink" />
+            <arg value="1" />
+        </exec>
+        <exec executable="bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="config:set" />
+            <arg value="dev/log/active" />
+            <arg value="1" />
+        </exec>
+        <exec executable="bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="config:set" />
+            <arg value="payment/Bitcoins/api_key" />
+            <arg value="GArM63Kab9ahw2muesTWptJneXFoxUZoFXrAKWs5c" />
+        </exec>
+        <phingcall target="plugin:symlink" />
+    </target>
+
+    <!--
+        This will create symlinks so the module can be tested inside a magento
+        environment. This should closely follow the `modman` file.
+    -->
+    <target name="plugin:symlink" hidden="true">
+        <symlink
+            target="${project.basedir}/app/code/community/Bitpay"
+            link="${project.basedir}/build/magento/app/code/community/Bitpay"
+            overwrite="true" />
+        <symlink
+            target="${project.basedir}/app/design/frontend/base/default/layout/bitcoins.xml"
+            link="${project.basedir}/build/magento/app/design/frontend/base/default/layout/bitcoins.xml"
+            overwrite="true" />
+        <symlink
+            target="${project.basedir}/app/design/frontend/base/default/template/bitcoins"
+            link="${project.basedir}/build/magento/app/design/frontend/base/default/template/bitcoins"
+            overwrite="true" />
+        <symlink
+            target="${project.basedir}/app/etc/modules/Bitpay_Bitcoins.xml"
+            link="${project.basedir}/build/magento/app/etc/modules/Bitpay_Bitcoins.xml"
+            overwrite="true" />
+        <symlink
+            target="${project.basedir}/lib/bitpay"
+            link="${project.basedir}/build/magento/lib/bitpay"
+            overwrite="true" />
     </target>
 </project>

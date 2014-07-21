@@ -29,5 +29,4 @@
 .travis.yml export-ignore
 build.xml export-ignore
 composer.json export-ignore
-/tests export-ignore
 modman export-ignore
