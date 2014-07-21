@@ -26,6 +26,7 @@
 
 if ($mage = realpath(__DIR__ . '/../build/magento/app/Mage.php')) {
     require_once $mage;
+    //Mage::setIsDeveloperMode(true);
     Mage::app();
 } else {
     exit('Could not find Mage.php');

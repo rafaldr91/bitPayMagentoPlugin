@@ -103,14 +103,16 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     //protected $_infoBlockType = 'bitcoins/info';
 
     /**
-     * @param string $currencyCode
+     * Check method for processing with base currency
+     * @see Mage_Payment_Model_Method_Abstract::canUseForCurrency()
      *
+     * @param string $currencyCode
      * @return boolean
      */
     public function canUseForCurrency($currencyCode)
     {
         Mage::log(
-            sprintf('Checking if can use currency "%s"', $currency),
+            sprintf('Checking if can use currency "%s"', $currencyCode),
             Zend_Log::DEBUG,
             Mage::helper('bitpay')->getLogFile()
         );
@@ -122,49 +124,38 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
     }
 
     /**
-     * @return boolean
+     * Can be used in regular checkout
+     * @see Mage_Payment_Model_Method_Abstract::canUseCheckout()
+     *
+     * @return bool
      */
     public function canUseCheckout()
     {
-        if (!$this->isApiKeyConfigured())
+        $helper = Mage::helper('bitpay');
+
+        if (!$helper->hasApiKey())
         {
-            Mage::log('Bitpay/Bitcoins: API key not entered', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
+            Mage::log(
+                'Bitpay/Bitcoins: API key not entered',
+                Zend_Log::ERR,
+                Mage::helper('bitpay')->getLogFile()
+            );
 
             return false;
         }
 
-        if (!$this->isTransactionSpeedConfigured())
+        if (!$helper->hasTransactionSpeed())
         {
-            Mage::log('Bitpay/Bitcoins: Transaction Speed invalid', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
+            Mage::log(
+                'Bitpay/Bitcoins: Transaction Speed has not been set',
+                Zend_Log::ERR,
+                Mage::helper('bitpay')->getLogFile()
+            );
 
             return false;
         }
 
         return $this->_canUseCheckout;
-    }
-
-    /**
-     * Returns true if the merchant has set their api key
-     *
-     * @return boolean
-     */
-    public function isApiKeyConfigured()
-    {
-        $key = Mage::getStoreConfig('payment/Bitcoins/api_key');
-
-        return !empty($key);
-    }
-
-    /**
-     * Returns true if Transaction Speed has been configured
-     *
-     * @return boolean
-     */
-    public function isTransactionSpeedConfigured()
-    {
-        $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
-
-        return !empty($speed);
     }
 
     /**

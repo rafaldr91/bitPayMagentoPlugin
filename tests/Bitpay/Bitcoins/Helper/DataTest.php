@@ -3,7 +3,7 @@
 /**
  * The MIT License (MIT)
  * 
- * Copyright (c) 2011-2014 BitPay LLC
+ * Copyright (c) 2011-2014 BitPay
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +24,34 @@
  * THE SOFTWARE.
  */
 
-class Bitpay_Bitcoins_Helper_Data extends Mage_Core_Helper_Abstract
+class Bitpay_Bitcoins_Helper_DataTest extends PHPUnit_Framework_TestCase
 {
 
-    /**
-     * File that is used to put all logging information in.
-     *
-     * @var string
-     */
-    const LOG_FILE = 'bitpay.log';
-
-    /**
-     * Returns the file used for logging
-     *
-     * @return string
-     */
-    public function getLogFile()
+    public function testHasApiKeyFalse()
     {
-        return self::LOG_FILE;
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/api_key', null);
+
+        $this->assertFalse(Mage::helper('bitpay')->hasApiKey());
     }
 
-    /**
-     * Returns true if the merchant has set their api key
-     *
-     * @return boolean
-     */
-    public function hasApiKey()
+    public function testHasApiKeyTrue()
     {
-        $key = Mage::getStoreConfig('payment/Bitcoins/api_key');
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/api_key', 'ThisIsMyApiKey');
 
-        return !empty($key);
+        $this->assertTrue(Mage::helper('bitpay')->hasApiKey());
     }
 
-    /**
-     * Returns true if Transaction Speed has been configured
-     *
-     * @return boolean
-     */
-    public function hasTransactionSpeed()
+    public function testHasTransactionSpeedFalse()
     {
-        $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/speed', null);
 
-        return !empty($speed);
+        $this->assertFalse(Mage::helper('bitpay')->hasTransactionSpeed());
+    }
+
+    public function testHasTransactionSpeedTrue()
+    {
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/speed', 'low');
+
+        $this->assertTrue(Mage::helper('bitpay')->hasTransactionSpeed());
     }
 }
