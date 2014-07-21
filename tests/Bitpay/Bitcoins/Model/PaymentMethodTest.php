@@ -30,7 +30,9 @@ class Bitpay_Bitcoins_Model_PaymentMethodTest extends PHPUnit_Framework_TestCase
     public function testCanUseForCurrency()
     {
         $paymentMethod = Mage::getModel('Bitcoins/paymentMethod');
+
         $this->assertTrue($paymentMethod->canUseForCurrency('USD'));
+        $this->assertFalse($paymentMethod->canUseForCurrency('ASDF'));
     }
 
     public function testCanUseCheckout()
