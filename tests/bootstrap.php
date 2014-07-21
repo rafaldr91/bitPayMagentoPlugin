@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<!--
+<?php
+
 /**
  * The MIT License (MIT)
  * 
@@ -23,35 +23,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
--->
-<phpunit
-    backupGlobals               = "false"
-    backupStaticAttributes      = "false"
-    bootstrap                   = "../tests/bootstrap.php"
-    colors                      = "true"
-    convertErrorsToExceptions   = "true"
-    convertNoticesToExceptions  = "true"
-    convertWarningsToExceptions = "true"
-    processIsolation            = "false"
-    stopOnFailure               = "false"
-    syntaxCheck                 = "false"
-    >
 
-    <testsuites>
-        <testsuite name="bitpay/magento-plugin Test Suite">
-            <directory>../tests/</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>../app/code/community/Bitpay/Bitcoins/</directory>
-            <directory>../lib/bitpay</directory>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-html" target="../build/docs/code-coverage" />
-        <log type="coverage-clover" target="../build/logs/clover.xml" />
-    </logging>
-</phpunit>
+if ($mage = realpath(__DIR__ . '/../build/magento/app/Mage.php')) {
+    require_once $mage;
+    Mage::app();
+} else {
+    exit('Could not find Mage.php');
+}
