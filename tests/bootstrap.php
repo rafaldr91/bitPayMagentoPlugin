@@ -24,10 +24,7 @@
  * THE SOFTWARE.
  */
 
-if ($mage = realpath(__DIR__ . '/../../../../../Mage.php')) {
-    require_once $mage;
-    Mage::app();
-} elseif ($mage = realpath(__DIR__ . '/../../../../../../build/magento/app/Mage.php')) {
+if ($mage = realpath(__DIR__ . '/../build/magento/app/Mage.php')) {
     require_once $mage;
     Mage::app();
 } else {
