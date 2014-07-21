@@ -37,53 +37,66 @@ class Bitpay_Bitcoins_Model_PaymentMethodTest extends PHPUnit_Framework_TestCase
 
     public function testCanUseCheckout()
     {
+        $this->markTestIncomplete();
     }
 
     public function testIsApiKeyConfigured()
     {
+        $this->markTestIncomplete();
     }
 
     public function testIsTransactionSpeedConfigured()
     {
+        $this->markTestIncomplete();
     }
 
     public function testAuthorize()
     {
+        $this->markTestIncomplete();
     }
 
     public function testCheckForPayment()
     {
+        $this->markTestIncomplete();
     }
 
     public function testInvoiceOrder()
     {
+        $this->markTestIncomplete();
     }
 
     public function testMarkOrderPaid()
     {
+        $this->markTestIncomplete();
     }
 
     public function testMarkOrderComplete()
     {
+        $this->markTestIncomplete();
     }
 
     public function testMarkOrderCancelled()
     {
+        $this->markTestIncomplete();
     }
 
     public function testExtractAddress()
     {
+        $this->markTestIncomplete();
     }
 
     public function testCreateInvoiceAndRedirect()
     {
+        $this->markTestIncomplete();
     }
 
     public function testGetOrderPlaceRedirectUrl()
     {
+        $this->markTestIncomplete();
     }
 
     public function testGetQuoteHash()
     {
+        $this->markTestIncomplete();
     }
 }
