@@ -96,6 +96,27 @@
         </resources>
     </global> 
 
+    <crontab>
+        <jobs>
+            <bitpay_bitcoins>
+                <schedule>
+                    <!--
+                        Everyday at midnight
+                    <cron_expr>0 0 * * *</cron_expr>
+                    -->
+                    <!--
+                        Debug
+                        Every 5 Minutes
+                    -->
+                    <cron_expr>*/1 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>Bitcoins/Observer::updateOrderStates</model>
+                </run>
+            </bitpay_bitcoins>
+        </jobs>
+    </crontab>
+
     <default>
         <payment>
             <Bitcoins>

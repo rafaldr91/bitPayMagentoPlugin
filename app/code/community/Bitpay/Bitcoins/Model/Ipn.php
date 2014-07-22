@@ -31,9 +31,8 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract
      */
     function _construct()
     {
+        parent::_construct();
         $this->_init('Bitcoins/ipn');
-
-        return parent::_construct();
     }
 
     /**
@@ -132,5 +131,69 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract
     function GetQuoteComplete($quoteId)
     {
         return $this->GetStatusReceived($quoteId, array('confirmed', 'complete'));
+    }
+
+    /**
+     * This method returns an array of orders in the database that have paid
+     * using bitcoins, but are still open and we need to query the invoice
+     * IDs at BitPay and see if they invoice has expired, is invalid, or is
+     * complete.
+     *
+     * @return array
+     */
+    public function getOpenOrders()
+    {
+        $doneCollection = $this->getCollection();
+
+        /**
+         * Get all the IPNs that have been completed
+         *
+         * SELECT
+         *   order_id
+         * FROM
+         *   bitpay_ipns
+         * WHERE
+         *   status IN ('completed','invalid','expired') AND order_id IS NOT NULL
+         * GROUP BY
+         *   order_id
+         */
+        $doneCollection
+            ->addFieldToFilter('status', array('in' => array('completed','invalid','expired')))
+            ->getSelect()
+            //->where('status IN (?)', array('completed','invalid','expired'))
+            //->where('order_id IS NOT NULL')
+            ->group('order_id');
+        Mage::log($doneCollection->toArray(), null, 'bitpay.log');
+        Mage::log($doneCollection->getColumnValues('order_id'), null, 'bitpay.log');
+        Mage::log((string) $doneCollection->getSelect(), null, 'bitpay.log');
+
+        return array();
+
+        $collection = $this->getCollection();
+
+        /**
+         * Get all the open orders that have not received a IPN that closes
+         * the invoice.
+         *
+         * SELECT
+         *   *
+         * FROM
+         *   bitpay_ipns
+         * JOIN
+         *   'sales/order' ON bitpay_ipns.order_id='sales/order'.increment_id
+         * WHERE
+         *   order_id NOT IN (?) AND order_id IS NOT NULL
+         * GROUP BY
+         *   order_id
+         */
+        $collection
+            ->getSelect()
+            ->join(
+                array('order' => $this->getTable('sales/order')),
+                'main_table.order_id = order.increment_id'
+            )
+            ->where('main_table.order_id NOT IN (?)', $doneCollection->getColumnValues('order_id'));
+
+        return $collection->toArray();
     }
 }
