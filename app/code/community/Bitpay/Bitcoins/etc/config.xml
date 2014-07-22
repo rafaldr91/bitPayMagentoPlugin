@@ -25,7 +25,7 @@
  */
  -->
 <config>
-	<frontend>
+    <frontend>
         <routers>
             <bitpay_callback>
                 <use>standard</use>
@@ -35,7 +35,7 @@
                 </args>
             </bitpay_callback>
         </routers>
-        <layout>			
+        <layout>
             <updates>
                 <bitcoins>
                     <file>bitcoins.xml</file>
@@ -44,69 +44,69 @@
         </layout>
     </frontend>
 
-	<modules>
-	   <Bitpay_Bitcoins>
-			<!-- for database updates -->
-		  <version>1.1.0</version>
-	   </Bitpay_Bitcoins>
-	</modules>
- 
-	<global>
-		<blocks>
-			<bitcoins>
-				<class>Bitpay_Bitcoins_Block</class>
-			</bitcoins>
-		</blocks>
+    <modules>
+        <Bitpay_Bitcoins>
+            <!-- for database updates -->
+            <version>1.1.0</version>
+        </Bitpay_Bitcoins>
+    </modules>
 
-		<models>
-			<Bitcoins>
-				<class>Bitpay_Bitcoins_Model</class>
-				<resourceModel>Bitcoins_resource</resourceModel>
-			</Bitcoins>
-			<Bitcoins_resource>
-				<class>Bitpay_Bitcoins_Model_Resource</class>
-				<entities>
-					<ipn>
-						<table>bitpay_ipns</table>
-					</ipn>
-				</entities>
-			</Bitcoins_resource>
-		</models>
-	 
-		<resources>
-			<Bitcoins_setup> <!-- keep this uppercase or you'll get duplicate errors -->
-				<setup>
-					<!-- which module to look for install/upgrade files in -->
-					<module>Bitpay_Bitcoins</module>
-				</setup>
-				<connection>
-					<use>core_setup</use>
-				</connection>
-			</Bitcoins_setup>
-			<Bitcoins_write>
-				<connection>
-				  <use>core_write</use>
-				</connection>
-			</Bitcoins_write>
-			<Bitcoins_read>
-			   <connection>
-				<use>core_read</use>
-			  </connection>
-			</Bitcoins_read>
-		</resources>
-	</global> 
-	
-	<default>
-		<payment>
-			<Bitcoins>
-				<active>1</active>
-				<model>Bitcoins/paymentMethod</model>
-				<title>Bitcoins</title>
-				<speed>low</speed>
-				<fullscreen>0</fullscreen>
-				<currencies>BTC, USD, EUR, GBP, JPY, CAD, AUD, CNY, CHF, SEK, NZD, KRW, AED, AFN, ALL, AMD, ANG, AOA, ARS, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL, BSD, BTN, BWP, BYR, BZD, CDF, CLF, CLP, COP, CRC, CVE, CZK, DJF, DKK, DOP, DZD, EEK, EGP, ETB, FJD, FKP, GEL, GHS, GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HRK, HTG, HUF, IDR, ILS, INR, IQD, ISK, JEP, JMD, JOD, KES, KGS, KHR, KMF, KWD, KYD, KZT, LAK, LBP, LKR, LRD, LSL, LTL, LVL, LYD, MAD, MDL, MGA, MKD, MMK, MNT, MOP, MRO, MUR, MVR, MWK, MXN, MYR, MZN, NAD, NGN, NIO, NOK, NPR, OMR, PAB, PEN, PGK, PHP, PKR, PLN, PYG, QAR, RON, RSD, RUB, RWF, SAR, SBD, SCR, SDG, SGD, SHP, SLL, SOS, SRD, STD, SVC, SYP, SZL, THB, TJS, TMT, TND, TOP, TRY, TTD, TWD, TZS, UAH, UGX, UYU, UZS, VEF, VND, VUV, WST, XAF, XAG, XAU, XCD, XOF, XPF, YER, ZAR, ZMW, ZWL</currencies>
-				<payment_action>authorize</payment_action>
-			</Bitcoins>
-		 </payment>
-	</default>
+    <global>
+        <blocks>
+            <bitcoins>
+                <class>Bitpay_Bitcoins_Block</class>
+            </bitcoins>
+        </blocks>
+
+        <models>
+            <Bitcoins>
+                <class>Bitpay_Bitcoins_Model</class>
+                <resourceModel>Bitcoins_resource</resourceModel>
+            </Bitcoins>
+            <Bitcoins_resource>
+                <class>Bitpay_Bitcoins_Model_Resource</class>
+                <entities>
+                    <ipn>
+                        <table>bitpay_ipns</table>
+                    </ipn>
+                </entities>
+            </Bitcoins_resource>
+        </models>
+
+        <resources>
+            <Bitcoins_setup> <!-- keep this uppercase or you'll get duplicate errors -->
+                <setup>
+                    <!-- which module to look for install/upgrade files in -->
+                    <module>Bitpay_Bitcoins</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </Bitcoins_setup>
+            <Bitcoins_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </Bitcoins_write>
+            <Bitcoins_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </Bitcoins_read>
+        </resources>
+    </global> 
+
+    <default>
+        <payment>
+            <Bitcoins>
+                <active>1</active>
+                <model>Bitcoins/paymentMethod</model>
+                <title>Bitcoins</title>
+                <speed>low</speed>
+                <fullscreen>0</fullscreen>
+                <currencies>BTC, USD, EUR, GBP, JPY, CAD, AUD, CNY, CHF, SEK, NZD, KRW, AED, AFN, ALL, AMD, ANG, AOA, ARS, AWG, AZN, BAM, BBD, BDT, BGN, BHD, BIF, BMD, BND, BOB, BRL, BSD, BTN, BWP, BYR, BZD, CDF, CLF, CLP, COP, CRC, CVE, CZK, DJF, DKK, DOP, DZD, EEK, EGP, ETB, FJD, FKP, GEL, GHS, GIP, GMD, GNF, GTQ, GYD, HKD, HNL, HRK, HTG, HUF, IDR, ILS, INR, IQD, ISK, JEP, JMD, JOD, KES, KGS, KHR, KMF, KWD, KYD, KZT, LAK, LBP, LKR, LRD, LSL, LTL, LVL, LYD, MAD, MDL, MGA, MKD, MMK, MNT, MOP, MRO, MUR, MVR, MWK, MXN, MYR, MZN, NAD, NGN, NIO, NOK, NPR, OMR, PAB, PEN, PGK, PHP, PKR, PLN, PYG, QAR, RON, RSD, RUB, RWF, SAR, SBD, SCR, SDG, SGD, SHP, SLL, SOS, SRD, STD, SVC, SYP, SZL, THB, TJS, TMT, TND, TOP, TRY, TTD, TWD, TZS, UAH, UGX, UYU, UZS, VEF, VND, VUV, WST, XAF, XAG, XAU, XCD, XOF, XPF, YER, ZAR, ZMW, ZWL</currencies>
+                <payment_action>authorize</payment_action>
+            </Bitcoins>
+        </payment>
+    </default>
 </config>
