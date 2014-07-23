@@ -25,3 +25,4 @@ app/design/frontend/base/default/layout/bitcoins.xml app/design/frontend/base/de
 app/design/frontend/base/default/template/bitcoins app/design/frontend/base/default/template/bitcoins
 app/etc/modules/Bitpay_Bitcoins.xml app/etc/modules/Bitpay_Bitcoins.xml
 lib/bitpay lib/bitpay
+shell/bitpay.php shell/bitpay.php

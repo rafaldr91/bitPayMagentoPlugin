@@ -3,7 +3,7 @@
 /**
  * The MIT License (MIT)
  * 
- * Copyright (c) 2011-2014 BitPay LLC
+ * Copyright (c) 2011-2014 BitPay, Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,13 +24,21 @@
  * THE SOFTWARE.
  */
  
-class Bitpay_Bitcoins_Model_Resource_Ipn_Collection extends Mage_Core_Model_Resource_Db_Collection_Abstract
+class Bitpay_Bitcoins_Model_Resource_Ipn_Collection extends Mage_Core_Model_Mysql4_Collection_Abstract
 {
 
     /**
      */
     protected function _construct()
     {
+        parent::_construct();
         $this->_init('Bitcoins/ipn');
+    }
+
+    public function delete()
+    {
+        foreach ($this->getItems() as $item) {
+            $item->delete();
+        }
     }
 }

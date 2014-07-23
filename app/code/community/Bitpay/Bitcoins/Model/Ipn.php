@@ -158,16 +158,21 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract
          *   order_id
          */
         $doneCollection
-            ->addFieldToFilter('status', array('in' => array('completed','invalid','expired')))
+            ->addFieldToSelect('order_id')
+            ->addFieldToFilter(
+                'status',
+                array(
+                    'in' => array(
+                        'complete',
+                        'invalid',
+                        'expired',
+                    )
+                )
+            );
+        $doneCollection
             ->getSelect()
-            //->where('status IN (?)', array('completed','invalid','expired'))
-            //->where('order_id IS NOT NULL')
+            ->where('order_id IS NOT NULL')
             ->group('order_id');
-        Mage::log($doneCollection->toArray(), null, 'bitpay.log');
-        Mage::log($doneCollection->getColumnValues('order_id'), null, 'bitpay.log');
-        Mage::log((string) $doneCollection->getSelect(), null, 'bitpay.log');
-
-        return array();
 
         $collection = $this->getCollection();
 
@@ -186,14 +191,64 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract
          * GROUP BY
          *   order_id
          */
+        if (0 < $doneCollection->count()) {
+            $collection
+                ->addFieldToFilter(
+                    'status',
+                    array(
+                        'in' => $doneCollection->getColumnValues('order_id')
+                    )
+                );
+        }
+
         $collection
             ->getSelect()
-            ->join(
-                array('order' => $this->getTable('sales/order')),
-                'main_table.order_id = order.increment_id'
-            )
-            ->where('main_table.order_id NOT IN (?)', $doneCollection->getColumnValues('order_id'));
+            ->where('order_id IS NOT NULL')
+            ->group('order_id');
 
-        return $collection->toArray();
+        return $collection->getItems();
+    }
+
+    /**
+     * Returns all records that have expired
+     */
+    public function getExpired()
+    {
+        $collection = $this->getCollection();
+        $now        = new DateTime('now', new DateTimezone('UTC'));
+
+        $collection
+            ->removeFieldFromSelect('status')
+            ->addFieldToFilter(
+                'expiration_time',
+                array(
+                    'lteq' => $now->getTimestamp()
+                )
+            );
+
+        $collection
+            ->getSelect()
+            ->group('order_id');
+
+        return $collection->getItems();
+    }
+
+    /**
+     * This will delete all records that match the order id (order id is also
+     * the increment id of the magento order)
+     *
+     * @see Bitpay_Bitcoins_Model_Resource_Ipn_Collection::delete()
+     *
+     * @param string $orderId
+     */
+    public function deleteByOrderId($orderId)
+    {
+        $collection = Mage::getModel('Bitcoins/ipn')
+            ->getCollection();
+        $collection
+            ->getSelect()
+            ->where('order_id = ?', $orderId);
+
+        $collection->delete();
     }
 }
