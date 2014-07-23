@@ -3,7 +3,7 @@
 /**
  * The MIT License (MIT)
  * 
- * Copyright (c) 2011-2014 BitPay
+ * Copyright (c) 2011-2014 BitPay LLC
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,47 @@
  * THE SOFTWARE.
  */
 
-if ($mage = realpath(__DIR__ . '/../build/magento/app/Mage.php')) {
-    require_once $mage;
-    //Mage::setIsDeveloperMode(true);
-    Mage::app();
-} else {
-    exit('Could not find Mage.php');
+class Bitpay_Bitcoins_Helper_Data extends Mage_Core_Helper_Abstract
+{
+
+    /**
+     * File that is used to put all logging information in.
+     *
+     * @var string
+     */
+    const LOG_FILE = 'bitpay.log';
+
+    /**
+     * Returns the file used for logging
+     *
+     * @return string
+     */
+    public function getLogFile()
+    {
+        return self::LOG_FILE;
+    }
+
+    /**
+     * Returns true if the merchant has set their api key
+     *
+     * @return boolean
+     */
+    public function hasApiKey()
+    {
+        $key = Mage::getStoreConfig('payment/Bitcoins/api_key');
+
+        return !empty($key);
+    }
+
+    /**
+     * Returns true if Transaction Speed has been configured
+     *
+     * @return boolean
+     */
+    public function hasTransactionSpeed()
+    {
+        $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
+
+        return !empty($speed);
+    }
 }
