@@ -24,10 +24,34 @@
  * THE SOFTWARE.
  */
 
-if ($mage = realpath(__DIR__ . '/../build/magento/app/Mage.php')) {
-    require_once $mage;
-    //Mage::setIsDeveloperMode(true);
-    Mage::app();
-} else {
-    exit('Could not find Mage.php');
+class Bitpay_Bitcoins_Helper_DataTest extends PHPUnit_Framework_TestCase
+{
+
+    public function testHasApiKeyFalse()
+    {
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/api_key', null);
+
+        $this->assertFalse(Mage::helper('bitpay')->hasApiKey());
+    }
+
+    public function testHasApiKeyTrue()
+    {
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/api_key', 'ThisIsMyApiKey');
+
+        $this->assertTrue(Mage::helper('bitpay')->hasApiKey());
+    }
+
+    public function testHasTransactionSpeedFalse()
+    {
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/speed', null);
+
+        $this->assertFalse(Mage::helper('bitpay')->hasTransactionSpeed());
+    }
+
+    public function testHasTransactionSpeedTrue()
+    {
+        Mage::app()->getStore()->setConfig('payment/Bitcoins/speed', 'low');
+
+        $this->assertTrue(Mage::helper('bitpay')->hasTransactionSpeed());
+    }
 }

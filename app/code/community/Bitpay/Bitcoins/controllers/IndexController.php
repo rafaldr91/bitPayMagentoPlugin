@@ -43,13 +43,19 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
      * bitpay's IPN lands here
      */
     public function indexAction() {
+        Mage::log(
+            sprintf('Incoming IPN from bitpay'),
+            Zend_Log::DEBUG,
+            Mage::helper('bitpay')->getLogFile()
+        );
+
         require Mage::getBaseDir('lib').'/bitpay/bp_lib.php';
         $apiKey  = Mage::getStoreConfig('payment/Bitcoins/api_key');
         $invoice = bpVerifyNotification($apiKey);
 
         if (is_string($invoice))
         {
-            Mage::log("bitpay callback error: $invoice", Zend_Log::ERR, 'bitpay.log');
+            Mage::log("bitpay callback error: $invoice", Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
             throw new Exception('Bitpay callback error:' . $invoice);
         }
 
@@ -66,7 +72,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
         }
         else
         {
-            Mage::log('Invalid posData, does not contain quoteId or orderId.', Zend_Log::ERR, 'bitpay.log');
+            Mage::log('Invalid posData, does not contain quoteId or orderId.', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
             throw new Exception('Invalid Bitpay IPN received.');
         }
 
@@ -75,14 +81,14 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
 
         if (!$order->getId())
         {
-            Mage::log('Order object does not contain an ID', Zend_Log::ERR, 'bitpay.log');
+            Mage::log('Order object does not contain an ID', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
             throw new Exception('Order object does not contain an ID');
         }
 
         // update the order if it exists already
         // BitPay Statuses
         // new, paid, confirmed, complete, expired, invalid
-        Mage::log('Received IPN with "' . $invoice['status'] . '" status', Zend_Log::DEBUG, 'bitpay.log');
+        Mage::log('Received IPN with "' . $invoice['status'] . '" status', Zend_Log::DEBUG, Mage::helper('bitpay')->getLogFile());
         switch($invoice['status'])
         {
 
@@ -99,7 +105,7 @@ class Bitpay_Bitcoins_IndexController extends Mage_Core_Controller_Front_Action
             // Mark confirmed/complete if the order has been paid
             $method = Mage::getModel('Bitcoins/paymentMethod');
             $method->MarkOrderComplete($order);
-            //Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, 'bitpay.log');
+            //Mage::log('Received a ' . $invoice['status'] . ' notification from BitPay but this order is not paid yet. Possible internal error with Magento. Check order status to confirm.', Zend_Log::ERR, Mage::helper('bitpay')->getLogFile());
             break;
 
         // Map to Magento State Closed

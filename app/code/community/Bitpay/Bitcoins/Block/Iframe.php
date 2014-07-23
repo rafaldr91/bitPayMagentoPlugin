@@ -107,8 +107,8 @@ class Bitpay_Bitcoins_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
 
         if (array_key_exists('error', $invoice))
         {
-            Mage::log('Error creating bitpay invoice', null, 'bitpay.log');
-            Mage::log($invoice['error'], null, 'bitpay.log');
+            Mage::log('Error creating bitpay invoice', null, Mage::helper('bitpay')->getLogFile());
+            Mage::log($invoice['error'], null, Mage::helper('bitpay')->getLogFile());
             Mage::throwException("Error creating bit-pay invoice.  Please try again or use another payment option.");
 
             return false; 
