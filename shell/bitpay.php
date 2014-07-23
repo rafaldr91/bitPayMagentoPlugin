@@ -49,22 +49,6 @@ class Bitpay_Shell_Bitpay extends Mage_Shell_Abstract
             return 0;
         }
 
-        if ($this->getArg('expired')) {
-            $expiredIpns = Mage::getModel('Bitcoins/ipn')->getExpired();
-            echo "\n";
-            foreach ($expiredIpns as $ipn) {
-                var_dump($ipn->toArray());
-                printf(
-                    'Order ID: %s',
-                    $ipn->getOrderId()
-                );
-
-                echo "\n";
-            }
-
-            return 0;
-        }
-
         echo $this->usageHelp();
     }
 
@@ -98,12 +82,7 @@ Usage:  php -f bitpay.php
 
 List of Statuses:
 
-  new
-  paid
-  confirmed
-  complete
   expired
-  invalid
 
 USAGE;
     }
