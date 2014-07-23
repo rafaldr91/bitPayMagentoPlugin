@@ -85,9 +85,8 @@ class Bitpay_Bitcoins_Helper_Data extends Mage_Core_Helper_Abstract
             }
 
             // Cancel the order
-            $this->cancelOrder(
-                Mage::getModel('sales/order')->loadByIncrementId($incrementId)
-            );
+            $order = Mage::getModel('sales/order')->loadByIncrementId($incrementId);
+            $this->cancelOrder($order);
 
             // Delete all IPN records for order id
             Mage::getModel('Bitcoins/ipn')
