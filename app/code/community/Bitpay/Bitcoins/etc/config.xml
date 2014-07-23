@@ -104,17 +104,19 @@
 
     <crontab>
         <jobs>
-            <bitpay_bitcoins>
+            <!--
+                This will clean up all the expired IPNs in the database and
+                will also updated the magento order to cancelled
+            -->
+            <bitpay_clean_expired>
                 <schedule>
-                    <!--
-                        Everyday at midnight
-                    -->
-                    <cron_expr>0 0 * * *</cron_expr>
+                    <!-- Run every 30 minutes -->
+                    <cron_expr>*/30 * * * *</cron_expr>
                 </schedule>
                 <run>
-                    <model>Bitcoins/Observer::updateOrderStates</model>
+                    <model>Bitcoins/Observer::cleanExpired</model>
                 </run>
-            </bitpay_bitcoins>
+            </bitpay_clean_expired>
         </jobs>
     </crontab>
     
