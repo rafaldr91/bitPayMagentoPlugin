@@ -123,6 +123,15 @@
     -->
     <target name="phpunit"
         description="Runs unit tests">
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="cache:clean" />
+        </exec>
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="cache:flush" />
+        </exec>
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="cache:disable" />
+        </exec>
         <exec executable="${project.bindir}/phpunit" passthru="true">
             <arg value="-c" />
             <arg path="${phpunit.configuration}" />
@@ -207,7 +216,7 @@
         <mkdir dir="build/magento/app/etc/" />
         <copy file="build/n98-magerun.yaml" tofile="build/magento/app/etc/n98-magerun.yaml" />
         <phingcall target="plugin:symlink" />
-        <exec executable="bin/n98-magerun" passthru="true">
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true">
             <arg value="install" />
             <arg value="-n" />
             <arg value="-vvv" />
@@ -221,20 +230,30 @@
             <arg value="--useDefaultConfigParams=yes" />
             <arg value="--baseUrl=${magento.baseurl}" />
         </exec>
-        <exec executable="bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
             <arg value="config:set" />
             <arg value="dev/template/allow_symlink" />
             <arg value="1" />
         </exec>
-        <exec executable="bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
             <arg value="config:set" />
             <arg value="dev/log/active" />
             <arg value="1" />
         </exec>
-        <exec executable="bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+        <phingcall target="plugin:enable" />
+    </target>
+
+    <target name="plugin:enable" hidden="true">
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
             <arg value="config:set" />
             <arg value="payment/Bitcoins/api_key" />
             <arg value="GArM63Kab9ahw2muesTWptJneXFoxUZoFXrAKWs5c" />
+        </exec>
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="cache:clean" />
+        </exec>
+        <exec executable="${project.basedir}/bin/n98-magerun" passthru="true" dir="${project.basedir}/build/magento">
+            <arg value="cache:flush" />
         </exec>
     </target>
 
