@@ -3,7 +3,7 @@
 /**
  * The MIT License (MIT)
  * 
- * Copyright (c) 2011-2014 BitPay LLC
+ * Copyright (c) 2011-2014 BitPay, Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -66,5 +66,78 @@ class Bitpay_Bitcoins_Helper_Data extends Mage_Core_Helper_Abstract
         $speed = Mage::getStoreConfig('payment/Bitcoins/speed');
 
         return !empty($speed);
+    }
+
+    /**
+     * This method is used to removed IPN records in the database that
+     * are expired and update the magento orders to canceled if they have
+     * expired.
+     */
+    public function cleanExpired()
+    {
+        $expiredRecords = Mage::getModel('Bitcoins/ipn')->getExpired();
+
+        // Parse each record
+        foreach ($expiredRecords as $ipn) {
+            $incrementId = $ipn->getOrderId();
+            if (empty($incrementId)) {
+                Mage::log(
+                    'Error processing IPN record',
+                    Zend_Log::DEBUG,
+                    self::LOG_FILE
+                );
+                Mage::log(
+                    $ipn->toJson(),
+                    Zend_Log::DEBUG,
+                    self::LOG_FILE
+                );
+                /**
+                 * We have no way to tie this to any magento order so it needs
+                 * to be deleted
+                 */
+                $ipn->delete();
+                Mage::log(
+                    'IPN record deleted from database',
+                    Zend_Log::DEBUG,
+                    self::LOG_FILE
+                );
+                continue;
+            }
+
+            // Cancel the order in the system
+            $order      = Mage::getModel('sales/order')->loadByIncrementId($incrementId);
+            $orderState = $order->getState();
+
+            /**
+             * If the order is complete, we do not want to cancel it
+             */
+            $statesWeDontCareAbout = array(
+                Mage_Sales_Model_Order::STATE_CANCELED,
+                Mage_Sales_Model_Order::STATE_CLOSED,
+                Mage_Sales_Model_Order::STATE_COMPLETE,
+            );
+            if (!in_array($orderState, $statesWeDontCareAbout)) {
+                $order->setState(
+                    Mage_Sales_Model_Order::STATE_CANCELED,
+                    true,
+                    'BitPay Invoice has expired', // comment
+                    false // notifiy customer?
+                )->save();
+                Mage::log(
+                    sprintf('Order "%s" has been canceled', $order->getIncrementId()),
+                    Zend_Log::DEBUG,
+                    self::LOG_FILE
+                );
+            }
+
+            // Delete all IPN records for order id
+            Mage::getModel('Bitcoins/ipn')
+                ->deleteByOrderId($ipn->getOrderId());
+            Mage::log(
+                sprintf('Deleted Record: %s', $ipn->toJson()),
+                Zend_Log::DEBUG,
+                self::LOG_FILE
+            );
+        }
     }
 }

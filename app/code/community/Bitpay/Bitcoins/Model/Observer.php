@@ -37,7 +37,7 @@ class Bitpay_Bitcoins_Model_Observer
         Mage::log(
             'cronjob: started',
             Zend_Log::DEBUG,
-            'bitpay.log'
+            Mage::helper('bitpay')->getLogFile()
         );
 
         $apiKey = Mage::getStoreConfig('payment/Bitcoins/api_key');
@@ -46,7 +46,7 @@ class Bitpay_Bitcoins_Model_Observer
             Mage::log(
                 'cronjob: Api Key not set.',
                 Zend_Log::ERR,
-                'bitpay.log'
+                Mage::helper('bitpay')->getLogFile()
             );
             return; // Api Key needs to be set
         }
@@ -80,15 +80,16 @@ class Bitpay_Bitcoins_Model_Observer
         Mage::log(
             'cronjob: end',
             Zend_Log::DEBUG,
-            'bitpay.log'
+            Mage::helper('bitpay')->getLogFile()
         );
     }
 
     /**
-     * This is called to clean up old IPNs in the bitpay_ipn table
+     * Method that is called via the magento cron to update orders if the
+     * invoice has expired
      */
-    public function cleanIpnTable()
+    public function cleanExpired()
     {
-        // @TODO
+        Mage::helper('bitpay')->cleanExpired();
     }
 }
