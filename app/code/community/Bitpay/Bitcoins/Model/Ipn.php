@@ -228,7 +228,9 @@ class Bitpay_Bitcoins_Model_Ipn extends Mage_Core_Model_Abstract
 
         $collection
             ->getSelect()
-            ->group('order_id');
+            ->group('order_id')
+            // Newest to oldest
+            ->order('expiration_time DESC');
 
         return $collection->getItems();
     }
