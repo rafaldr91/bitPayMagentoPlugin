@@ -3,7 +3,7 @@
 /**
  * The MIT License (MIT)
  * 
- * Copyright (c) 2011-2014 BitPay
+ * Copyright (c) 2011-2014 BitPay, Inc.
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,4 +30,10 @@ if ($mage = realpath(__DIR__ . '/../build/magento/app/Mage.php')) {
     Mage::app();
 } else {
     exit('Could not find Mage.php');
+}
+
+if ($composer = realpath(__DIR__ . '/../vendor/autoload.php')) {
+    require_once $composer;
+} else {
+    exit('Composer not found');
 }

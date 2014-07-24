@@ -46,7 +46,10 @@
     <filter>
         <whitelist>
             <directory>../app/code/community/Bitpay/Bitcoins/</directory>
-            <directory>../lib/bitpay</directory>
+            <directory>../shell</directory>
+            <exclude>
+                <directory>../app/code/community/Bitpay/Bitcoins/sql</directory>
+            </exclude>
         </whitelist>
     </filter>
 
