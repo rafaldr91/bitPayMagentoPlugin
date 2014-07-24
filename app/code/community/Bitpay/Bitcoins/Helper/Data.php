@@ -117,14 +117,15 @@ class Bitpay_Bitcoins_Helper_Data extends Mage_Core_Helper_Abstract
             Zend_Log::DEBUG,
             self::LOG_FILE
         );
+
         if ($andDelete) {
             $ipn->delete();
+            Mage::log(
+                'IPN record deleted from database',
+                Zend_Log::DEBUG,
+                self::LOG_FILE
+            );
         }
-        Mage::log(
-            'IPN record deleted from database',
-            Zend_Log::DEBUG,
-            self::LOG_FILE
-        );
     }
 
     /**
