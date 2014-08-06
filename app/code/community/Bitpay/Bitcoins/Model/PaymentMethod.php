@@ -457,7 +457,17 @@ class Bitpay_Bitcoins_Model_PaymentMethod extends Mage_Payment_Model_Method_Abst
             'apiKey'            => $apiKey,
         );
 
-        $options += $this->ExtractAddress($order->getShippingAddress());
+        /**
+         * Some merchants are using custom extensions where the shipping
+         * address may not be set, this will only extract the shipping
+         * address if there is one already set.
+         */
+        if ($order->getShippingAddress()) {
+            $options = array_merge(
+                $options,
+                $this->ExtractAddress($order->getShippingAddress())
+            );
+        }
         $invoice  = bpCreateInvoice($orderId, $amount, array('orderId' => $orderId), $options);
         $payment->setIsTransactionPending(true); // status will be PAYMENT_REVIEW instead of PROCESSING
 
