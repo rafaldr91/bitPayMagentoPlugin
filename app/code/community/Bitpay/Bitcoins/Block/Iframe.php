@@ -57,6 +57,7 @@ class Bitpay_Bitcoins_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
         // @todo refactor this
         if (!($quote = Mage::getSingleton('checkout/session')->getQuote()) 
             or !($payment = $quote->getPayment())
+            or !$payment->getMethod()
             or !($instance = $payment->getMethodInstance())
             or ($instance->getCode() != 'Bitcoins'))
         {
