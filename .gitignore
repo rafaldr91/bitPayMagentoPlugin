@@ -24,6 +24,7 @@
 lib/bitpay/bp_config.php
 /bin/
 /build/cache/
+/build/dist/
 /build/docs/
 /build/logs/
 /build/magento/

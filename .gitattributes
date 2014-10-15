@@ -1,6 +1,6 @@
 # The MIT License (MIT)
 # 
-# Copyright (c) 2011-2014 BitPay LLC
+# Copyright (c) 2011-2014 BitPay, Inc.
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 # These files/directories are not included when making
 # an archive of this repository.
 /build export-ignore
+/scripts export-ignore
 /tests export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
