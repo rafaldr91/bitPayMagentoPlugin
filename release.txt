@@ -1,0 +1,4 @@
+[ ] Update version in composer.json file
+[ ] Update version in `scripts/package` and run script
+[ ] Update CHANGELOG file
+[ ] Update to Mangento Connect and GitHub
