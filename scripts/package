@@ -15,7 +15,7 @@ $version    = '2.1.1';
 $vendorDir  = __DIR__ . '/../vendor';
 $distDir    = __DIR__ . '/../build/dist';
 $tmpDistDir = $distDir . '/tmp'; // Files will be placed here temporarly so we can zip/tar them.
-$distFile   = $distDir . '/BitPay_Magento-'.$version; // Without extension
+$distFile   = $distDir . '/Bitpay_Core-'.$version; // Without extension
 
 require_once $vendorDir . '/autoload.php';
 
@@ -61,7 +61,7 @@ $filesystem->copy('README.md', sprintf('%s/app/code/community/Bitpay/Core/README
  * Need to create the package.xml file required by Magento
  */
 $xml = simplexml_load_string('<package/>');
-$xml->addChild('name', 'BitPay');
+$xml->addChild('name', 'Bitpay_Core');
 $xml->addChild('version', $version);
 $xml->addChild('stability', 'stable');
 $xml->addChild('license', 'MIT')
