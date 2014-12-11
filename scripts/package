@@ -11,11 +11,11 @@ date_default_timezone_set('America/New_York'); // Main Office is in Eastern Time
 /**
  * Various Configuration Settings
  */
-$version    = '2.1.0';
+$version    = '2.1.1';
 $vendorDir  = __DIR__ . '/../vendor';
 $distDir    = __DIR__ . '/../build/dist';
 $tmpDistDir = $distDir . '/tmp'; // Files will be placed here temporarly so we can zip/tar them.
-$distFile   = $distDir . '/Bitpay_Core-'.$version; // Without extension
+$distFile   = $distDir . '/BitPay_Magento-'.$version; // Without extension
 
 require_once $vendorDir . '/autoload.php';
 
@@ -61,7 +61,7 @@ $filesystem->copy('README.md', sprintf('%s/app/code/community/Bitpay/Core/README
  * Need to create the package.xml file required by Magento
  */
 $xml = simplexml_load_string('<package/>');
-$xml->addChild('name', 'Bitpay_Core');
+$xml->addChild('name', 'BitPay');
 $xml->addChild('version', $version);
 $xml->addChild('stability', 'stable');
 $xml->addChild('license', 'MIT')
@@ -74,8 +74,8 @@ $xml->addChild('notes');
 $authorsNode = $xml->addChild('authors');
 $authors = array(
     array(
-        'Joshua Estes', // Name
-        'BitPayJoshua', // Magento Connect Username
+        'Integrations Team', // Name
+        'BitPayInc', // Magento Connect Username
         'support@bitpay.com', // Email
     ),
 );
@@ -93,7 +93,7 @@ $requiredNode = $xml->addChild('required', 'php');
 $requiredNode->addAttribute('php_min', '5.4.0');
 $requiredNode->addAttribute('php_max', '6.0.0');
 $extensionsNode = $xml->addChild('extensions');
-foreach (array('gmp', 'openssl', 'mcrypt') as $ext) {
+foreach (array('openssl', 'mcrypt') as $ext) {
     $extNode = $extensionsNode->addChild('name', $ext);
     $extNode->addChild('min');
     $extNode->addChild('max');
