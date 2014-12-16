@@ -13,7 +13,7 @@
     },
     "require": {
         "composer/installers": "~1.0",
-        "bitpay/php-client": "~2.0@dev"
+        "bitpay/php-client": "2.2.*"
     },
     "require-dev": {
         "symfony/finder": "~2.3",
@@ -32,7 +32,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.0.x-dev"
+            "dev-master": "2.2.x-dev"
         }
     },
     "archive": {

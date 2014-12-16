@@ -1,3 +1,15 @@
+2.1.1
+	Bug fix sanitizing labels for token pairing
+	Replaced GMP only requirement with GMP or BC Math requirement
+	
+2.1.0
+	Bug fix with IPNs not working when debug mode is enabled
+	Updated BitPay PHP SDK
+	Added a release checklist
+
+2.0.1
+	Small bug fix in how package script
+
 2.0.0
 	Initial release of the new Magento Extension that supports BitPay's new
 	cryptographically secure API. You can read more about the new API on the
