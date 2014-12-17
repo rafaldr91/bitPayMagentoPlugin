@@ -4,8 +4,6 @@
  * @see https://github.com/bitpay/magento-plugin/blob/master/LICENSE
  */
 
-
-
 /**
  * @route /bitpay/ipn
  */
