@@ -16,9 +16,9 @@ class Bitpay_Core_Model_TransactionSpeed
     public function toOptionArray()
     {
         return array(
-            array('value' => self::SPEED_LOW, 'label'    => Mage::helper('bitpay')->__(self::SPEED_LOW)),
-            array('value' => self::SPEED_MEDIUM, 'label' => Mage::helper('bitpay')->__(self::SPEED_MEDIUM)),
-            array('value' => self::SPEED_HIGH, 'label'   => Mage::helper('bitpay')->__(self::SPEED_HIGH)),
+            array('value' => self::SPEED_LOW, 'label'    => Mage::helper('bitpay')->__(ucwords(self::SPEED_LOW)),
+            array('value' => self::SPEED_MEDIUM, 'label' => Mage::helper('bitpay')->__(ucwords(self::SPEED_MEDIUM)),
+            array('value' => self::SPEED_HIGH, 'label'   => Mage::helper('bitpay')->__(ucwords(self::SPEED_HIGH)),
         );
     }
 }
