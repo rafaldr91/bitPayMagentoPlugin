@@ -19,17 +19,19 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
      */
     public function indexAction()
     {
-        if (!ini_get('allow_url_fopen')) {
+        if (false === ini_get('allow_url_fopen')) {
             ini_set('allow_url_fopen', true);
         }
 
         $raw_post_data = file_get_contents('php://input');
 
-        if ($raw_post_data === false) {
+        if (false === $raw_post_data) {
+            Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_IpnController: Could not read from the php://input stream or invalid Bitpay IPN received.');
             throw new Exception('Could not read from the php://input stream or invalid Bitpay IPN received.');
         }
 
         Mage::helper('bitpay')->registerAutoloader();
+
         Mage::helper('bitpay')->debugData(
             array(
                 sprintf('Incoming IPN from bitpay'),
@@ -39,9 +41,21 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
         );
 
         // Magento doesn't seem to have a way to get the Request body
-        $ipn              = json_decode($raw_post_data);
+        $ipn = json_decode($raw_post_data);
+
+        if (true === empty($ipn)) {
+            Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_IpnController: Could not decode the JSON payload from BitPay.');
+            throw new Exception('Could not decode the JSON payload from BitPay.');
+        }
+
+        if (true === empty($ipn->id) || false === isset($ipn->posData->id)) {
+            Mage::helper('bitpay')->debugData(sprintf('Did not receive order ID in IPN. See IPN "%s" in database.', $mageIpn->getId()));
+            throw new Exception('Invalid Bitpay IPN received - did not receive order ID.');
+        }
+
         $ipn->posData     = is_string($ipn->posData) ? json_decode($ipn->posData) : $ipn->posData;
         $ipn->buyerFields = isset($ipn->buyerFields) ? $ipn->buyerFields : new stdClass();
+
         Mage::helper('bitpay')->debugData($ipn);
 
         // Log IPN
@@ -63,16 +77,9 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
             )
         )->save();
 
-        if (empty($ipn->id) || !isset($ipn->posData->id)) {
-            Mage::helper('bitpay')->debugData(
-                sprintf('Did not receive order id in IPN. See IPN "%s" in database.', $mageIpn->getId())
-            );
-            throw new Exception('Invalid Bitpay IPN received.');
-        }
-
         $order = Mage::getModel('sales/order')->loadByIncrementId($ipn->posData->id);
 
-        if (!$order->getId()) {
+        if (false === isset($order) || true === empty($order->getId())) {
             Mage::helper('bitpay')->debugData('Invalid Bitpay IPN received.');
             Mage::throwException('Invalid Bitpay IPN received.');
         }
@@ -84,27 +91,44 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
          */
         $invoice = Mage::getModel('bitpay/method_bitcoin')->fetchInvoice($ipn->id);
 
+        if (false === isset($invoice) || true === empty($invoice) {
+            Mage::helper('bitpay')->debugData('[ERROR] Could not retrieve the invoice details for the ipn ID of ' . $ipn->id);
+            Mage::throwException('Could not retrieve the invoice details for the ipn ID of ' . $ipn->id);
+        }
+
         // Does the status match?
-        if ($invoice && $invoice->getStatus() != $ipn->status) {
-            Mage::getModel('bitpay/method_bitcoin')->debugData('IPN status and status from BitPay are different');
-            Mage::throwException('There was an error processing the ipn');
+        if ($invoice->getStatus() != $ipn->status) {
+            Mage::getModel('bitpay/method_bitcoin')->debugData('[ERROR] IPN status and status from BitPay are different.');
+            Mage::throwException('There was an error processing the IPN - statuses are different.');
         }
 
         // Does the price match?
-        if ($invoice && $invoice->getPrice() != $ipn->price) {
-            Mage::getModel('bitpay/method_bitcoin')>debugData('Price difference');
-            Mage::throwException('There was an error processing the ipn');
+        if ($invoice->getPrice() != $ipn->price) {
+            Mage::getModel('bitpay/method_bitcoin')>debugData('[ERROR] IPN price and invoice price are different.');
+            Mage::throwException('There was an error processing the IPN - invoice price does not match the IPN price.');
         }
 
         // Update the order to notifiy that it has been paid
-        if (in_array($invoice->getStatus(), array('paid', 'confirmed', 'complete'))) {
+        if (true === in_array($invoice->getStatus(), array('paid', 'confirmed', 'complete'))) {
             $payment = Mage::getModel('sales/order_payment')->setOrder($order);
-            $payment->registerCaptureNotification($invoice->getPrice());
-            $order->addPayment($payment)->save();
+            
+            if (true === isset($payment) && false === empty($payment)) {
+                $payment->registerCaptureNotification($invoice->getPrice());
+                $order->addPayment($payment)->save();
+            } else {
+                Mage::helper('bitpay')->debugData('[ERROR] Could not create a payment object in the Bitpay IPN controller.');
+                Mage::throwException('Could not create a payment object in the Bitpay IPN controller.');
+            }
         }
 
         // use state as defined by Merchant
         $state = Mage::getStoreConfig(sprintf('payment/bitpay/invoice_%s', $invoice->getStatus()));
+
+        if (false === isset($state) || true === empty($state) {
+            Mage::helper('bitpay')->debugData('[ERROR] Could not retrieve the defined state parameter to update this order to in the Bitpay IPN controller.');
+            Mage::throwException('Could not retrieve the defined state parameter to update this order to in the Bitpay IPN controller.');
+        }
+
         $order->addStatusToHistory(
             $state,
             sprintf('Incoming IPN status "%s" updated order state to "%s"', $invoice->getStatus(), $state)
