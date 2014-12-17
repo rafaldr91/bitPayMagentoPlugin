@@ -18,8 +18,8 @@ class Bitpay_Core_Model_Network
     public function toOptionArray()
     {
         return array(
-            array('value' => self::NETWORK_LIVENET, 'label' => Mage::helper('bitpay')->__('Livenet')),
-            array('value' => self::NETWORK_TESTNET, 'label' => Mage::helper('bitpay')->__('Testnet')),
+            array('value' => self::NETWORK_LIVENET, 'label' => Mage::helper('bitpay')->__(ucwords(self::NETWORK_LIVENET))),
+            array('value' => self::NETWORK_TESTNET, 'label' => Mage::helper('bitpay')->__(ucwords(self::NETWORK_TESTNET))),
         );
     }
 }
