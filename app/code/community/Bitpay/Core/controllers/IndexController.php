@@ -14,19 +14,19 @@ class Bitpay_Core_IndexController extends Mage_Core_Controller_Front_Action
      */
     public function indexAction()
     {
-        $params = $this->getRequest()->getParams();
         $paid   = false;
-        if (isset($params['paid'])) {
+        $params = $this->getRequest()->getParams();
+
+        if (true === isset($params['paid'])) {
             Mage::helper('bitpay')->registerAutoloader();
-            Mage::helper('bitpay')->debugData(
-                $params
-            );
+            Mage::helper('bitpay')->debugData($params);
+        } else {
+            Mage::helper('bitpay')->debugData('[ERROR] Could not get params from request.');
         }
 
         $this->loadLayout();
+
         $this->getResponse()->setHeader('Content-type', 'application/json');
-        $this->getResponse()->setBody(
-            json_encode(array('paid' => $paid))
-        );
+        $this->getResponse()->setBody(json_encode(array('paid' => $paid)));
     }
 }
