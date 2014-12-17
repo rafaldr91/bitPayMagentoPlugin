@@ -8,8 +8,10 @@
 #
 # Written by Rich Morgan <rich@bitpay.com>
 
-#!/bin/bash
-
+# For full transparency I've listed all the depricated files and folders
+# related to the old plugin here for your information. This is the complete
+# list of items you would want to backup and/or remove if you wanted to do
+# this by hand yourself or if you just wanted a list for tracking purposes.
 old_files[0]="/lib/bitpay/bp_config_default.php"
 old_files[1]="/lib/bitpay/bp_lib.php"
 old_files[2]="/lib/bitpay/bp_options.php"
@@ -45,11 +47,14 @@ old_files[31]="magento-plugin-master.zip"
 old_files[32]="modman"
 old_files[33]="README.md"
 
+CLEAN="true"
+RMOPTS="-vrfd"
+
 echo "Looking for your Magento installation. Please stand by - this may take a few minutes while I search..."
 
 # In case we have multiple Magento installs on this one
 # server, we will just take the first one and ask...
-i=`find /usr/local/zend/apache2 -name Mage.php -type f | head -n 1 2>/dev/null`
+i=`find /var /usr /opt -name Mage.php -type f | head -n 1 2>/dev/null`
 
 if [ -e $i ]
 then
@@ -57,13 +62,16 @@ then
     cd $DIR && cd ../
     mage_dir=`pwd`
     echo "It looks like Magento is installed in the $mage_dir directory."
-    echo -n "Is this correct? (y/n) > "
+    echo "Is this correct? (y/n) > "
 else
+    # In case we can't find the Magento folder, we are just
+    # providing a default value here. This happens to be the
+    # default for an Ubuntu-based machine, for example.
     DIR="/var/www/html/magento"
     cd $DIR
     mage_dir=`pwd`
     echo "You don't have Magento installed or this script doesn't have permissions to view the directory it's contained in."
-    echo -n "Should I default to $DIR ? (y/n) > "
+    echo "Should I default to $mage_dir ? (y/n) > "
 fi
 
 read answer
@@ -77,17 +85,35 @@ then
         if [ -e $fullname ]
         then
             echo "  Found $fullname - removing!"
-            rm -vrfd $fullname
+            rm $RMOPTS $fullname
         else
             echo "  $filename does not exist - skipping!"
         fi
     done
-
-    echo -n "Process complete."
+    echo "File removal process complete. Checking to make sure your Magento environment was completely cleaned of old BitPay files..."
+    echo ""
+    for filename in "${old_files[@]}"
+    do
+        fullname=$mage_dir$filename
+        if [ -e $fullname ]
+        then
+            echo "  The old plugin file $fullname is still present!"
+            CLEAN="false"
+        else
+            echo "  $filename is not present - good!"
+        fi
+    done
+    if [ $CLEAN = "false" ]
+    then
+        echo "Old BitPay plugin files are still present in your Magento directory. This is likely due to this script not having permissions to delete them. You can fix this by running this script as superuser or you can remove the files by hand."
+    else
+        echo "Good!  I didn't find any remaining old BitPay plugin files in your Magento directory!  You can now safely install the new BitPay plugin."
+    fi
+    echo "Process complete."
     echo ""
 else
     echo "Okay, please enter the path you would like me to use or QUIT if you wish to abort the process."
-    echo -n "Full path or QUIT ? > "
+    echo "Full path or QUIT ? > "
     read answer
     if [ $answer = "QUIT" ]
     then
@@ -100,11 +126,31 @@ else
             if [ -e $fullname ]
             then
                 echo "  Found $fullname - removing!"
-                rm -vrfd $fullname
+                rm $RMOPTS $fullname
             else
                 echo "  $filename does not exist - skipping!"
             fi
         done
-        echo -n "Process complete."
+        echo "File removal process complete. Checking to make sure your Magento environment was completely cleaned of old BitPay files..."
+        echo ""
+        for filename in "${old_files[@]}"
+        do
+            fullname=$mage_dir$filename
+            if [ -e $fullname ]
+            then
+               echo "  The old plugin file $fullname is still present!"
+                CLEAN="false"
+            else
+                echo "  $filename is not present - good!"
+            fi
+        done
+        if [ $CLEAN = "false" ]
+        then
+            echo "Old BitPay plugin files are still present in your Magento directory. This is likely due to this script not having permissions to delete them. You can fix this by running this script as superuser or you can remove the files by hand."
+        else
+            echo "Good!  I didn't find any remaining old BitPay plugin files in your Magento directory!  You can now safely install the new BitPay plugin."
+        fi
+        echo "Process complete."
+        echo ""
     fi
 fi
