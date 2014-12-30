@@ -1,5 +1,6 @@
 2.1.2
         Added extra error handling and fixed debugging
+        Re-added new order email notifications
         Updated README documentation for accuracy
         Re-wrote delete.sh shell script to autodetect Magento directory and
         be more helpful when cleaning an old BitPay plugin from the server
