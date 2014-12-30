@@ -112,7 +112,16 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
             
             if (true === isset($payment) && false === empty($payment)) {
                 $payment->registerCaptureNotification($invoice->getPrice());
-                $order->addPayment($payment)->save();
+                $order->addPayment($payment);
+
+                // If the customer has not already been notified by email
+                // send the notification now that there's a new order.
+                if (!$order->getEmailSent()) {
+                    Mage::helper('bitpay')->debugData('[INFO] Order email not sent so I am calling $order->sendNewOrderEmail() now...');
+                    $order->sendNewOrderEmail();
+                }
+
+                $order->save();
             } else {
                 Mage::helper('bitpay')->debugData('[ERROR] Could not create a payment object in the Bitpay IPN controller.');
                 Mage::throwException('Could not create a payment object in the Bitpay IPN controller.');
