@@ -22,7 +22,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
     public function debugData($debugData)
     {
         if (true === isset($debugData) && false === empty($debugData)) {
-            Mage::getModel('bitpay/method_bitcoin')->debugData($debugData);
+            \Mage::getModel('bitpay/method_bitcoin')->debugData($debugData);
         }
     }
 
@@ -31,7 +31,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function isDebug()
     {
-        return (boolean) Mage::getStoreConfig('payment/bitpay/debug');
+        return (boolean) \Mage::getStoreConfig('payment/bitpay/debug');
     }
 
     /**
@@ -41,7 +41,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function hasTransactionSpeed()
     {
-        $speed = Mage::getStoreConfig('payment/bitpay/speed');
+        $speed = \Mage::getStoreConfig('payment/bitpay/speed');
 
         return !empty($speed);
     }
@@ -53,7 +53,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getNotificationUrl()
     {
-        return Mage::getUrl(Mage::getStoreConfig('payment/bitpay/notification_url'));
+        return \Mage::getUrl(\Mage::getStoreConfig('payment/bitpay/notification_url'));
     }
 
     /**
@@ -63,7 +63,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getRedirectUrl()
     {
-        return Mage::getUrl(Mage::getStoreConfig('payment/bitpay/redirect_url'));
+        return \Mage::getUrl(\Mage::getStoreConfig('payment/bitpay/redirect_url'));
     }
 
     /**
@@ -73,7 +73,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
     public function registerAutoloader()
     {
         if (true === empty($this->_autoloaderRegistered)) {
-            $autoloader_filename = Mage::getBaseDir('lib').'/Bitpay/Autoloader.php';
+            $autoloader_filename = \Mage::getBaseDir('lib').'/Bitpay/Autoloader.php';
 
             if (true === is_file($autoloader_filename) && true === is_readable($autoloader_filename)) {
                 require_once $autoloader_filename;
@@ -154,7 +154,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         // Sanitize label
-        $label = preg_replace('/[^a-zA-Z0-9 ]/', '', Mage::app()->getStore()->getName());
+        $label = preg_replace('/[^a-zA-Z0-9 ]/', '', \Mage::app()->getStore()->getName());
         $label = substr('Magento ' . $label, 0, 59);
 
         $this->debugData('[INFO] In Bitpay_Core_Helper_Data::sendPairingRequest(): using the label "' . $label . '".');
@@ -346,7 +346,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
         return array(
             'public_key'  => 'payment/bitpay/public_key',
             'private_key' => 'payment/bitpay/private_key',
-            'network'     => Mage::getStoreConfig('payment/bitpay/network'),
+            'network'     => \Mage::getStoreConfig('payment/bitpay/network'),
             'key_storage' => '\\Bitpay\\Storage\\MagentoStorage',
         );
     }
@@ -397,7 +397,7 @@ class Bitpay_Core_Helper_Data extends Mage_Core_Helper_Abstract
             $this->debugData('[INFO] In Bitpay_Core_Helper_Data::getToken(): successfully created new BitPay Token object.');
         }
 
-        $token->setToken(Mage::getStoreConfig('payment/bitpay/token'));
+        $token->setToken(\Mage::getStoreConfig('payment/bitpay/token'));
 
         return $token;
     }
