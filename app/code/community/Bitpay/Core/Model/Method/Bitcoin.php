@@ -39,7 +39,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($payment) || false === isset($amount) || true === empty($payment) || true === empty($amount)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
         }
 
         $this->debugData('[INFO] Bitpay_Core_Model_Method_Bitcoin::authorize(): authorizing new order.');
@@ -49,16 +49,16 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
         
         if (false === isset($invoice) || true === empty($invoice)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): could not initialize invoice.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): could not initialize invoice.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): could not initialize invoice.');
         }
 
         $invoice = $this->prepareInvoice($invoice, $payment, $amount);
 
         try {
-            $bitpayInvoice = Mage::helper('bitpay')->getBitpayClient()->createInvoice($invoice);
-        } catch (Exception $e) {
+            $bitpayInvoice = \Mage::helper('bitpay')->getBitpayClient()->createInvoice($invoice);
+        } catch (\Exception $e) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): ' . $e->getMessage());
-            Mage::throwException('In Bitpay_Core_Model_Method_Bitcoin::authorize(): Could not authorize transaction.');
+            \Mage::throwException('In Bitpay_Core_Model_Method_Bitcoin::authorize(): Could not authorize transaction.');
         }
 
         self::$_redirectUrl = $bitpayInvoice->getUrl();
@@ -71,7 +71,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
         );
 
         // Save BitPay Invoice in database for reference
-        $mirrorInvoice = Mage::getModel('bitpay/invoice')
+        $mirrorInvoice = \Mage::getModel('bitpay/invoice')
             ->prepareWithBitpayInvoice($bitpayInvoice)
             ->prepateWithOrder($payment->getOrder())
             ->save();
@@ -90,7 +90,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
      */
     public function canUseCheckout()
     {
-        $token = Mage::getStoreConfig('payment/bitpay/token');
+        $token = \Mage::getStoreConfig('payment/bitpay/token');
 
         if (false === isset($token) || true === empty($token)) {
             /**
@@ -117,18 +117,18 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($id) || true === empty($id)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): missing or invalid id parameter.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): missing or invalid id parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): missing or invalid id parameter.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): function called with id ' . $id);
         }
 
-        Mage::helper('bitpay')->registerAutoloader();
+       \Mage::helper('bitpay')->registerAutoloader();
 
-        $client  = Mage::helper('bitpay')->getBitpayClient();
+        $client  = \Mage::helper('bitpay')->getBitpayClient();
 
         if (false === isset($client) || true === empty($client)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): could not obtain BitPay client.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): could not obtain BitPay client.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): could not obtain BitPay client.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): obtained BitPay client successfully.');
         }
@@ -137,7 +137,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
 
         if (false === isset($invoice) || true === empty($invoice)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): could not retrieve invoice from BitPay.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): could not retrieve invoice from BitPay.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): could not retrieve invoice from BitPay.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::fetchInvoice(): successfully retrieved invoice id ' . $id . ' from BitPay.');
         }
@@ -156,7 +156,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($address) || true === empty($address)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::extractAddress(): missing or invalid address parameter.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::extractAddress(): missing or invalid address parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::extractAddress(): missing or invalid address parameter.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::extractAddress(): called with good address parameter, extracting now.');
         }
@@ -210,21 +210,21 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
      */
     private function initializeInvoice()
     {
-        Mage::helper('bitpay')->registerAutoloader();
+        \Mage::helper('bitpay')->registerAutoloader();
 
         $invoice = new Bitpay\Invoice();
 
         if (false === isset($invoice) || true === empty($invoice)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::initializeInvoice(): could not construct new BitPay invoice object.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::initializeInvoice(): could not construct new BitPay invoice object.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::initializeInvoice(): could not construct new BitPay invoice object.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::initializeInvoice(): constructed new BitPay invoice object successfully.');
         }
 
         $invoice->setFullNotifications(true);
-        $invoice->setTransactionSpeed(Mage::getStoreConfig('payment/bitpay/speed'));
-        $invoice->setNotificationUrl(Mage::getUrl(Mage::getStoreConfig('payment/bitpay/notification_url')));
-        $invoice->setRedirectUrl(Mage::getUrl(Mage::getStoreConfig('payment/bitpay/redirect_url')));
+        $invoice->setTransactionSpeed(\Mage::getStoreConfig('payment/bitpay/speed'));
+        $invoice->setNotificationUrl(\Mage::getUrl(\Mage::getStoreConfig('payment/bitpay/notification_url')));
+        $invoice->setRedirectUrl(\Mage::getUrl(\Mage::getStoreConfig('payment/bitpay/redirect_url')));
 
         return $invoice;
     }
@@ -242,7 +242,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($invoice) || true === empty($invoice) || false === isset($payment) || true === empty($payment) || false === isset($amount) || true === empty($amount)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::prepareInvoice(): missing or invalid invoice, payment or amount parameter.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::prepareInvoice(): missing or invalid invoice, payment or amount parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::prepareInvoice(): missing or invalid invoice, payment or amount parameter.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::prepareInvoice(): entered function with good invoice, payment and amount parameters.');
         }
@@ -268,7 +268,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($invoice) || true === empty($invoice) || false === isset($order) || true === empty($order)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): missing or invalid invoice or order parameter.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): missing or invalid invoice or order parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): missing or invalid invoice or order parameter.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): function called with good invoice and order parameters.');
         }
@@ -277,7 +277,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
 
         if (false === isset($buyer) || true === empty($buyer)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): could not construct new BitPay buyer object.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): could not construct new BitPay buyer object.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addBuyerInfo(): could not construct new BitPay buyer object.');
         }
 
         $buyer->setFirstName($order->getCustomerFirstname());
@@ -298,7 +298,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($invoice) || true === empty($invoice) || false === isset($order) || true === empty($order)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): missing or invalid invoice or order parameter.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): missing or invalid invoice or order parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): missing or invalid invoice or order parameter.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): function called with good invoice and order parameters.');
         }
@@ -307,7 +307,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
 
         if (false === isset($currency) || true === empty($currency)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): could not construct new BitPay currency object.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): could not construct new BitPay currency object.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): could not construct new BitPay currency object.');
         }
 
         $currency->setCode($order->getBaseCurrencyCode());
@@ -327,7 +327,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     {
         if (false === isset($invoice) || true === empty($invoice) || false === isset($amount) || true === empty($amount)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): missing or invalid invoice or amount parameter.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): missing or invalid invoice or amount parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): missing or invalid invoice or amount parameter.');
         } else {
             $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): function called with good invoice and amount parameters.');
         }
@@ -336,7 +336,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
 
         if (false === isset($item) || true === empty($item)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): could not construct new BitPay item object.');
-            throw new Exception('In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): could not construct new BitPay item object.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addPriceInfo(): could not construct new BitPay item object.');
         }
 
         $item->setPrice($amount);
