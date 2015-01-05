@@ -27,17 +27,17 @@ class Bitpay_Core_Model_Config_PairingCode extends Mage_Core_Model_Config_Data
             return;
         }
 
-        Mage::helper('bitpay')->debugData('[INFO] In Bitpay_Core_Model_Config_PairingCode::save(): attempting to pair with BitPay with pairing code ' . $pairingCode);
+        \Mage::helper('bitpay')->debugData('[INFO] In Bitpay_Core_Model_Config_PairingCode::save(): attempting to pair with BitPay with pairing code ' . $pairingCode);
 
         try {
-            Mage::helper('bitpay')->sendPairingRequest($pairingCode);
-        } catch (Exception $e) {
-            Mage::helper('bitpay')->debugData(sprintf('[ERROR] Exception thrown while calling the sendPairingRequest() function. The specific error message is: "%s"', $e->getMessage()));
-            Mage::getSingleton('core/session')->addError('There was an error while trying to pair with BitPay using the pairing code '.$pairingCode.'. Please try again or enable debug mode and send the "payment_bitpay.log" file to support@bitpay.com for more help.');
+            \Mage::helper('bitpay')->sendPairingRequest($pairingCode);
+        } catch (\Exception $e) {
+            \Mage::helper('bitpay')->debugData(sprintf('[ERROR] Exception thrown while calling the sendPairingRequest() function. The specific error message is: "%s"', $e->getMessage()));
+            \Mage::getSingleton('core/session')->addError('There was an error while trying to pair with BitPay using the pairing code '.$pairingCode.'. Please try again or enable debug mode and send the "payment_bitpay.log" file to support@bitpay.com for more help.');
 
             return;
         }
 
-        Mage::getSingleton('core/session')->addSuccess('Pairing with BitPay was successful.');
+        \Mage::getSingleton('core/session')->addSuccess('Pairing with BitPay was successful.');
     }
 }
