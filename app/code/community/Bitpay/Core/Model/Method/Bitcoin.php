@@ -58,12 +58,6 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
             $bitpayInvoice = Mage::helper('bitpay')->getBitpayClient()->createInvoice($invoice);
         } catch (Exception $e) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): ' . $e->getMessage());
-            $this->debugData(
-                array(
-                    Mage::helper('bitpay')->getBitpayClient()->getRequest()->getBody(),
-                    Mage::helper('bitpay')->getBitpayClient()->getResponse()->getBody(),
-                )
-            );
             Mage::throwException('In Bitpay_Core_Model_Method_Bitcoin::authorize(): Could not authorize transaction.');
         }
 
