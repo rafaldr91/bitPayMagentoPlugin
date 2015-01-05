@@ -20,26 +20,26 @@ class Bitpay_Core_Model_Observer
      */
     public function updateOrderStates()
     {
-        $apiKey = Mage::getStoreConfig('payment/bitpay/api_key');
+        $apiKey = \Mage::getStoreConfig('payment/bitpay/api_key');
 
         if (false === isset($apiKey) || empty($apiKey)) {
-            Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not start job to update the order states because the API key was not set.');
+            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not start job to update the order states because the API key was not set.');
             return;
         } else {
-            Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() started job to query BitPay to update the existing order states.');
+            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() started job to query BitPay to update the existing order states.');
         }
 
         /*
          * Get all of the orders that are open and have not received an IPN for
          * complete, expired, or invalid.
          */
-        $orders = Mage::getModel('bitpay/ipn')->getOpenOrders();
+        $orders = \Mage::getModel('bitpay/ipn')->getOpenOrders();
 
         if (false === isset($orders) || empty($orders)) {
-            Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not retrieve the open orders.');
+            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not retrieve the open orders.');
             return;
         } else {
-            Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() successfully retrieved existing open orders.');
+            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() successfully retrieved existing open orders.');
         }
 
         /*
@@ -60,7 +60,7 @@ class Bitpay_Core_Model_Observer
             // No? continue
         }
 
-        Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() order status update job finished.');
+        \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() order status update job finished.');
     }
 
     /**
@@ -69,7 +69,7 @@ class Bitpay_Core_Model_Observer
      */
     public function cleanExpired()
     {
-        Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::cleanExpired() called.');
-        Mage::helper('bitpay')->cleanExpired();
+        \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::cleanExpired() called.');
+        \Mage::helper('bitpay')->cleanExpired();
     }
 }
