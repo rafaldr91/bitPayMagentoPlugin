@@ -19,12 +19,12 @@ class Bitpay_Core_Model_Status
     public function toOptionArray()
     {
         return array(
-            array('value' => self::STATUS_NEW, 'label'       => Mage::helper('bitpay')->__(ucwords(self::STATUS_NEW))),
-            array('value' => self::STATUS_PAID, 'label'      => Mage::helper('bitpay')->__(ucwords(self::STATUS_PAID))),
-            array('value' => self::STATUS_CONFIRMED, 'label' => Mage::helper('bitpay')->__(ucwords(self::STATUS_CONFIRMED))),
-            array('value' => self::STATUS_COMPLETE, 'label'  => Mage::helper('bitpay')->__(ucwords(self::STATUS_COMPLETE))),
-            array('value' => self::STATUS_EXPIRED, 'label'   => Mage::helper('bitpay')->__(ucwords(self::STATUS_EXPIRED))),
-            array('value' => self::STATUS_INVALID, 'label'   => Mage::helper('bitpay')->__(ucwords(self::STATUS_INVALID))),
+            array('value' => self::STATUS_NEW, 'label'       => \Mage::helper('bitpay')->__(ucwords(self::STATUS_NEW))),
+            array('value' => self::STATUS_PAID, 'label'      => \Mage::helper('bitpay')->__(ucwords(self::STATUS_PAID))),
+            array('value' => self::STATUS_CONFIRMED, 'label' => \Mage::helper('bitpay')->__(ucwords(self::STATUS_CONFIRMED))),
+            array('value' => self::STATUS_COMPLETE, 'label'  => \Mage::helper('bitpay')->__(ucwords(self::STATUS_COMPLETE))),
+            array('value' => self::STATUS_EXPIRED, 'label'   => \Mage::helper('bitpay')->__(ucwords(self::STATUS_EXPIRED))),
+            array('value' => self::STATUS_INVALID, 'label'   => \Mage::helper('bitpay')->__(ucwords(self::STATUS_INVALID))),
         );
     }
 }
