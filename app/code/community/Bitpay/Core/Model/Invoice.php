@@ -25,8 +25,8 @@ class Bitpay_Core_Model_Invoice extends Mage_Core_Model_Abstract
     public function prepareWithBitpayInvoice($invoice)
     {
         if (false === isset($invoice) || true === empty($invoice)) {
-            Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Model_Invoice::prepareWithBitpayInvoice(): Missing or empty $invoice parameter.');
-            throw new Exception('In Bitpay_Core_Model_Invoice::prepareWithBitpayInvoice(): Missing or empty $invoice parameter.');
+            \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Model_Invoice::prepareWithBitpayInvoice(): Missing or empty $invoice parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Invoice::prepareWithBitpayInvoice(): Missing or empty $invoice parameter.');
         }
 
         $this->addData(
@@ -60,8 +60,8 @@ class Bitpay_Core_Model_Invoice extends Mage_Core_Model_Abstract
     public function prepateWithOrder($order)
     {
         if (false === isset($order) || true === empty($order)) {
-            Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Model_Invoice::prepateWithOrder(): Missing or empty $order parameter.');
-            throw new Exception('In Bitpay_Core_Model_Invoice::prepateWithOrder(): Missing or empty $order parameter.');
+            \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Model_Invoice::prepateWithOrder(): Missing or empty $order parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Invoice::prepateWithOrder(): Missing or empty $order parameter.');
         }
 
         $this->addData(
