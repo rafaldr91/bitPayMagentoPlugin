@@ -24,13 +24,13 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
         $raw_post_data = file_get_contents('php://input');
 
         if (false === $raw_post_data) {
-            Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_IpnController: Could not read from the php://input stream or invalid Bitpay IPN received.');
-            throw new Exception('Could not read from the php://input stream or invalid Bitpay IPN received.');
+            \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_IpnController: Could not read from the php://input stream or invalid Bitpay IPN received.');
+            throw new \Exception('Could not read from the php://input stream or invalid Bitpay IPN received.');
         }
 
-        Mage::helper('bitpay')->registerAutoloader();
+        \Mage::helper('bitpay')->registerAutoloader();
 
-        Mage::helper('bitpay')->debugData(
+        \Mage::helper('bitpay')->debugData(
             array(
                 sprintf('Incoming IPN from bitpay'),
                 getallheaders(),
@@ -42,22 +42,22 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
         $ipn = json_decode($raw_post_data);
 
         if (true === empty($ipn)) {
-            Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_IpnController: Could not decode the JSON payload from BitPay.');
-            throw new Exception('Could not decode the JSON payload from BitPay.');
+            \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_IpnController: Could not decode the JSON payload from BitPay.');
+            throw new \Exception('Could not decode the JSON payload from BitPay.');
         }
 
         if (true === empty($ipn->id) || false === isset($ipn->posData->id)) {
-            Mage::helper('bitpay')->debugData(sprintf('Did not receive order ID in IPN. See IPN "%s" in database.', $mageIpn->getId()));
-            throw new Exception('Invalid Bitpay IPN received - did not receive order ID.');
+            \Mage::helper('bitpay')->debugData(sprintf('Did not receive order ID in IPN. See IPN "%s" in database.', $mageIpn->getId()));
+            throw new \Exception('Invalid Bitpay IPN received - did not receive order ID.');
         }
 
         $ipn->posData     = is_string($ipn->posData) ? json_decode($ipn->posData) : $ipn->posData;
         $ipn->buyerFields = isset($ipn->buyerFields) ? $ipn->buyerFields : new stdClass();
 
-        Mage::helper('bitpay')->debugData($ipn);
+        \Mage::helper('bitpay')->debugData($ipn);
 
         // Log IPN
-        $mageIpn = Mage::getModel('bitpay/ipn')->addData(
+        $mageIpn = \Mage::getModel('bitpay/ipn')->addData(
             array(
                 'invoice_id'       => isset($ipn->id) ? $ipn->id : '',
                 'url'              => isset($ipn->url) ? $ipn->url : '',
@@ -75,11 +75,11 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
             )
         )->save();
 
-        $order = Mage::getModel('sales/order')->loadByIncrementId($ipn->posData->id);
+        $order = \Mage::getModel('sales/order')->loadByIncrementId($ipn->posData->id);
 
         if (false === isset($order) || true === empty($order->getId())) {
-            Mage::helper('bitpay')->debugData('Invalid Bitpay IPN received.');
-            Mage::throwException('Invalid Bitpay IPN received.');
+            \Mage::helper('bitpay')->debugData('Invalid Bitpay IPN received.');
+            \Mage::throwException('Invalid Bitpay IPN received.');
         }
 
         /**
@@ -87,28 +87,28 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
          * match up and no one is using an automated tool to post IPN's to merchants
          * store.
          */
-        $invoice = Mage::getModel('bitpay/method_bitcoin')->fetchInvoice($ipn->id);
+        $invoice = \Mage::getModel('bitpay/method_bitcoin')->fetchInvoice($ipn->id);
 
         if (false === isset($invoice) || true === empty($invoice) {
-            Mage::helper('bitpay')->debugData('[ERROR] Could not retrieve the invoice details for the ipn ID of ' . $ipn->id);
-            Mage::throwException('Could not retrieve the invoice details for the ipn ID of ' . $ipn->id);
+            \Mage::helper('bitpay')->debugData('[ERROR] Could not retrieve the invoice details for the ipn ID of ' . $ipn->id);
+            \Mage::throwException('Could not retrieve the invoice details for the ipn ID of ' . $ipn->id);
         }
 
         // Does the status match?
         if ($invoice->getStatus() != $ipn->status) {
-            Mage::getModel('bitpay/method_bitcoin')->debugData('[ERROR] IPN status and status from BitPay are different.');
-            Mage::throwException('There was an error processing the IPN - statuses are different.');
+            \Mage::getModel('bitpay/method_bitcoin')->debugData('[ERROR] IPN status and status from BitPay are different.');
+            \Mage::throwException('There was an error processing the IPN - statuses are different.');
         }
 
         // Does the price match?
         if ($invoice->getPrice() != $ipn->price) {
-            Mage::getModel('bitpay/method_bitcoin')>debugData('[ERROR] IPN price and invoice price are different.');
-            Mage::throwException('There was an error processing the IPN - invoice price does not match the IPN price.');
+            \Mage::getModel('bitpay/method_bitcoin')>debugData('[ERROR] IPN price and invoice price are different.');
+            \Mage::throwException('There was an error processing the IPN - invoice price does not match the IPN price.');
         }
 
         // Update the order to notifiy that it has been paid
         if (true === in_array($invoice->getStatus(), array('paid', 'confirmed', 'complete'))) {
-            $payment = Mage::getModel('sales/order_payment')->setOrder($order);
+            $payment = \Mage::getModel('sales/order_payment')->setOrder($order);
             
             if (true === isset($payment) && false === empty($payment)) {
                 $payment->registerCaptureNotification($invoice->getPrice());
@@ -117,23 +117,23 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
                 // If the customer has not already been notified by email
                 // send the notification now that there's a new order.
                 if (!$order->getEmailSent()) {
-                    Mage::helper('bitpay')->debugData('[INFO] Order email not sent so I am calling $order->sendNewOrderEmail() now...');
+                    \Mage::helper('bitpay')->debugData('[INFO] Order email not sent so I am calling $order->sendNewOrderEmail() now...');
                     $order->sendNewOrderEmail();
                 }
 
                 $order->save();
             } else {
-                Mage::helper('bitpay')->debugData('[ERROR] Could not create a payment object in the Bitpay IPN controller.');
-                Mage::throwException('Could not create a payment object in the Bitpay IPN controller.');
+                \Mage::helper('bitpay')->debugData('[ERROR] Could not create a payment object in the Bitpay IPN controller.');
+                \Mage::throwException('Could not create a payment object in the Bitpay IPN controller.');
             }
         }
 
         // use state as defined by Merchant
-        $state = Mage::getStoreConfig(sprintf('payment/bitpay/invoice_%s', $invoice->getStatus()));
+        $state = \Mage::getStoreConfig(sprintf('payment/bitpay/invoice_%s', $invoice->getStatus()));
 
         if (false === isset($state) || true === empty($state) {
-            Mage::helper('bitpay')->debugData('[ERROR] Could not retrieve the defined state parameter to update this order to in the Bitpay IPN controller.');
-            Mage::throwException('Could not retrieve the defined state parameter to update this order to in the Bitpay IPN controller.');
+            \Mage::helper('bitpay')->debugData('[ERROR] Could not retrieve the defined state parameter to update this order to in the Bitpay IPN controller.');
+            \Mage::throwException('Could not retrieve the defined state parameter to update this order to in the Bitpay IPN controller.');
         }
 
         $order->addStatusToHistory(
