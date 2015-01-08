@@ -40,7 +40,7 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
             throw new \Exception('Could not decode the JSON payload from BitPay.');
         }
 
-        if (true === empty($ipn->id) || false === isset($ipn->posData->id)) {
+        if (true === empty($ipn->id) || false === isset($ipn->posData)) {
             \Mage::helper('bitpay')->debugData(sprintf('[ERROR] In Bitpay_Core_IpnController::indexAction(), Did not receive order ID in IPN: ', $ipn));
             throw new \Exception('Invalid Bitpay payment notification message received - did not receive order ID.');
         }
