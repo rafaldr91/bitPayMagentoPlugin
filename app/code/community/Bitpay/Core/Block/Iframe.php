@@ -32,7 +32,7 @@ class Bitpay_Core_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
 
         if (false === isset($method) || true === empty($method)) {
             \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not obtain an instance of the payment method.');
-            throw new Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not obtain an instance of the payment method.');
+            throw new \Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not obtain an instance of the payment method.');
         }
 
         $options = array_merge(
@@ -48,7 +48,7 @@ class Bitpay_Core_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
 
         if (false === isset($options) || true === empty($options)) {
             \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not merge the options array.');
-            throw new Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not merge the options array.');
+            throw new \Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not merge the options array.');
         } else {
             \Mage::helper('bitpay')->debugData($options);
         }
@@ -60,7 +60,7 @@ class Bitpay_Core_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
 
         if (false === isset($price) || true === empty($price)) {
             \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not get the new rounded price.');
-            throw new Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not get the new rounded price.');
+            throw new \Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not get the new rounded price.');
         }
 
         //serialize info about the quote to detect changes
@@ -68,7 +68,7 @@ class Bitpay_Core_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
 
         if (false === isset($hash) || true === empty($hash)) {
             \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not get the quote hash.');
-            throw new Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not merge the quote hash.');
+            throw new \Exception('In Bitpay_Core_Block_Iframe::getIframeUrl(): Could not merge the quote hash.');
         }
 
         \Mage::helper('bitpay')->registerAutoloader();
