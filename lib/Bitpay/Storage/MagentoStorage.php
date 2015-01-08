@@ -32,7 +32,7 @@ class MagentoStorage implements StorageInterface
             $config->saveConfig($key->getId(), $encryptedData);
         } else {
             \Mage::helper('bitpay')->debugData('[ERROR] In file lib/Bitpay/Storage/MagentoStorage.php, class MagentoStorage::persist - Could not instantiate a \Mage_Core_Model_Config object.');
-            throw new Exception('[ERROR] In file lib/Bitpay/Storage/MagentoStorage.php, class MagentoStorage::persist - Could not instantiate a \Mage_Core_Model_Config object.');
+            throw new \Exception('[ERROR] In file lib/Bitpay/Storage/MagentoStorage.php, class MagentoStorage::persist - Could not instantiate a \Mage_Core_Model_Config object.');
         }
     }
 
