@@ -30,13 +30,7 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
 
         \Mage::helper('bitpay')->registerAutoloader();
 
-        \Mage::helper('bitpay')->debugData(
-            array(
-                sprintf('Incoming IPN from bitpay'),
-                getallheaders(),
-                $raw_post_data,
-            )
-        );
+        \Mage::helper('bitpay')->debugData(array(sprintf('Incoming IPN from bitpay'),$raw_post_data,));
 
         // Magento doesn't seem to have a way to get the Request body
         $ipn = json_decode($raw_post_data);
@@ -47,7 +41,7 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
         }
 
         if (true === empty($ipn->id) || false === isset($ipn->posData->id)) {
-            \Mage::helper('bitpay')->debugData(sprintf('Did not receive order ID in IPN. See IPN "%s" in database.', $mageIpn->getId()));
+            \Mage::helper('bitpay')->debugData(sprintf('Did not receive order ID in IPN: ', $ipn);
             throw new \Exception('Invalid Bitpay IPN received - did not receive order ID.');
         }
 
