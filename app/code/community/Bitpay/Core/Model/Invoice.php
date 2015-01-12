@@ -24,18 +24,20 @@ class Bitpay_Core_Model_Invoice extends Mage_Core_Model_Abstract
      */
     public function prepareWithBitpayInvoice($invoice)
     {
+        if (false === isset($invoice) || true === empty($invoice)) {
+            \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Model_Invoice::prepareWithBitpayInvoice(): Missing or empty $invoice parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Invoice::prepareWithBitpayInvoice(): Missing or empty $invoice parameter.');
+        }
+
         $this->addData(
             array(
                 'id'               => $invoice->getId(),
-                //'updated_at'       => 'NOW()',
                 'url'              => $invoice->getUrl(),
                 'pos_data'         => $invoice->getPosData(),
                 'status'           => $invoice->getStatus(),
                 'btc_price'        => $invoice->getBtcPrice(),
-                //'btc_due'          => $invoice->getBtcDue(),
                 'price'            => $invoice->getPrice(),
                 'currency'         => $invoice->getCurrency()->getCode(),
-                //'ex_rates'         => $invoice->getExRates(),
                 'order_id'         => $invoice->getOrderId(),
                 'invoice_time'     => $invoice->getInvoiceTime(),
                 'expiration_time'  => $invoice->getExpirationTime(),
@@ -43,7 +45,6 @@ class Bitpay_Core_Model_Invoice extends Mage_Core_Model_Abstract
                 'btc_paid'         => $invoice->getBtcPaid(),
                 'rate'             => $invoice->getRate(),
                 'exception_status' => $invoice->getExceptionStatus(),
-                //'token'            => $invoice->getToken(),
             )
         );
 
@@ -58,6 +59,11 @@ class Bitpay_Core_Model_Invoice extends Mage_Core_Model_Abstract
      */
     public function prepateWithOrder($order)
     {
+        if (false === isset($order) || true === empty($order)) {
+            \Mage::helper('bitpay')->debugData('[ERROR] In Bitpay_Core_Model_Invoice::prepateWithOrder(): Missing or empty $order parameter.');
+            throw new \Exception('In Bitpay_Core_Model_Invoice::prepateWithOrder(): Missing or empty $order parameter.');
+        }
+
         $this->addData(
             array(
                 'quote_id'     => $order->getQuoteId(),

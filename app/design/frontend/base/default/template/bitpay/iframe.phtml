@@ -32,7 +32,7 @@ if ($request->getScheme() == 'https') {
 //<![CDATA[
 new PeriodicalExecuter(function() {
     new Ajax.Request(
-        "<?php echo $url; ?>?quote=<?php echo $quoteId; ?>",
+        "<?php echo $url . '?quote=' . $quoteId; ?>",
         {
             asynchronous: true,
             evalScripts: true, 
