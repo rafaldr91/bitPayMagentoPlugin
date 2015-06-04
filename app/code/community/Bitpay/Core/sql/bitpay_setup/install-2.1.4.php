@@ -6,7 +6,7 @@
 $this->startSetup();
 
 /**
- * IPN Log Table, used to keep track of incoiming IPNs
+ * IPN Log Table, used to keep track of incoming IPNs
  */
 $this->run(sprintf('DROP TABLE IF EXISTS `%s`;', $this->getTable('bitpay/ipn')));
 $ipnTable = new Varien_Db_Ddl_Table();
@@ -20,7 +20,7 @@ $ipnTable->addColumn('price', Varien_Db_Ddl_Table::TYPE_DECIMAL, array(16, 8));
 $ipnTable->addColumn('currency', Varien_Db_Ddl_Table::TYPE_TEXT, 10);
 $ipnTable->addColumn('invoice_time', Varien_Db_Ddl_Table::TYPE_INTEGER, 11);
 $ipnTable->addColumn('expiration_time', Varien_Db_Ddl_Table::TYPE_INTEGER, 11);
-$ipnTable->addColumn('curent_time', Varien_Db_Ddl_Table::TYPE_INTEGER, 11);
+$ipnTable->addColumn('current_time', Varien_Db_Ddl_Table::TYPE_INTEGER, 11);
 $ipnTable->addColumn('pos_data', Varien_Db_Ddl_Table::TYPE_TEXT, 255);
 $ipnTable->addColumn('btc_paid', Varien_Db_Ddl_Table::TYPE_DECIMAL, array(16, 8));
 $ipnTable->addColumn('rate', Varien_Db_Ddl_Table::TYPE_DECIMAL, array(16, 8));

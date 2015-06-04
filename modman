@@ -25,4 +25,3 @@ app/design/frontend/base/default/layout/bitpay.xml app/design/frontend/base/defa
 app/design/frontend/base/default/template/bitpay app/design/frontend/base/default/template/bitpay
 app/etc/modules/Bitpay_Core.xml app/etc/modules/Bitpay_Core.xml
 lib/Bitpay lib/Bitpay
-lib/Symfony lib/Symfony
