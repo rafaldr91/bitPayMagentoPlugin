@@ -28,9 +28,6 @@ $finder = new \Symfony\Component\Finder\Finder();
 $finder
     ->files()
     ->in($vendorDir . '/bitpay/php-client/src')
-    ->in($vendorDir . '/symfony/config/')
-    ->in($vendorDir . '/symfony/filesystem/')
-    ->in($vendorDir . '/symfony/dependency-injection/')
     ->exclude('Tests');
 
 foreach ($finder as $file) {
