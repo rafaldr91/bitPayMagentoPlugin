@@ -1,3 +1,6 @@
+2.1.5
+    Updated bitpay/php-client to 2.2.4
+
 2.1.4
     Removed Symfony dependency
     Fixed timestamp logging in database
@@ -12,7 +15,7 @@
 2.1.1
 	Bug fix sanitizing labels for token pairing
 	Replaced GMP only requirement with GMP or BC Math requirement
-	
+
 2.1.0
 	Bug fix with IPNs not working when debug mode is enabled
 	Updated BitPay PHP SDK
