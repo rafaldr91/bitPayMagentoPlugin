@@ -13,7 +13,7 @@
     },
     "require": {
         "composer/installers": "~1.0",
-        "bitpay/php-client": "^2.2"
+        "bitpay/php-client": "dev-master#9027ce67e4b28516ff1ebd1046bdd15c37a7a59f"
     },
     "require-dev": {
         "symfony/finder": "~2.3",

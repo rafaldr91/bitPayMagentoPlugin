@@ -1,3 +1,7 @@
+2.1.6
+    Pegged bitpay/php-client to commit 9027ce67e4b28516ff1ebd1046bdd15c37a7a59f
+    Fixes IPN issues
+
 2.1.5
     Updated bitpay/php-client to 2.2.4
 
