@@ -1,5 +1,6 @@
 Unreleased
 	MagentoStorage::load returns KeyInterface instance or throws an exception.
+	IPN handler now does not override manually updated order statuses
 
 2.1.6
     Pegged bitpay/php-client to commit 9027ce67e4b28516ff1ebd1046bdd15c37a7a59f
