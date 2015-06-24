@@ -1,4 +1,6 @@
 Unreleased
+
+2.1.7
 	MagentoStorage::load returns KeyInterface instance or throws an exception.
 	IPN handler now does not override manually updated order statuses
 
