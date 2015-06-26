@@ -282,6 +282,46 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
 
         $buyer->setFirstName($order->getCustomerFirstname());
         $buyer->setLastName($order->getCustomerLastname());
+
+        $address = $order->getBillingAddress();
+        
+        if (!empty($address->getStreet1())) {
+            $buyer->setAddress(
+                array(
+                    $address->getStreet1(),
+                    $address->getStreet2(),
+                    $address->getStreet3(),
+                    $address->getStreet4()
+                    )
+                );
+        }
+
+        if (!empty($address->getRegionCode())) {
+            $buyer->setState($address->getRegionCode());
+        } else if (!empty($address->getRegion())) {
+            $buyer->setState($address->getRegion());
+        }
+
+        if (!empty($address->getCountry())) {
+            $buyer->setCountry($address->getCountry());
+        }
+
+        if (!empty($address->getCity())) {
+            $buyer->setCity($address->getCity());
+        }
+
+        if (!empty($address->getPostcode())) {
+            $buyer->setZip($address->getPostcode());
+        }
+
+        if (!empty($address->getEmail())) {
+            $buyer->setEmail($address->getEmail());
+        }
+        
+        if (!empty($address->getTelephone())) {
+            $buyer->setPhone($address->getTelephone());
+        }
+
         $invoice->setBuyer($buyer);
 
         return $invoice;

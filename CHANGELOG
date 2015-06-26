@@ -1,4 +1,5 @@
 Unreleased
+	Customer info now logged for invoice
 
 2.1.7
 	MagentoStorage::load returns KeyInterface instance or throws an exception.
