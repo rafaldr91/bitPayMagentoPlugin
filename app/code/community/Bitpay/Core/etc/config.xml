@@ -118,6 +118,7 @@
                 <notification_url>bitpay/ipn</notification_url>
                 <redirect_url>checkout/onepage/success</redirect_url>
                 <speed>medium</speed>
+                <fullscreen>0</fullscreen>
                 <invoice_new>new</invoice_new>
                 <invoice_paid>processing</invoice_paid>
                 <invoice_confirmed>processing</invoice_confirmed>
