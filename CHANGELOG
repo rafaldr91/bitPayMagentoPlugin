@@ -1,5 +1,8 @@
 Unreleased
+
+2.1.8
 	Customer info now logged for invoice
+	Added direct checkout feature
 
 2.1.7
 	MagentoStorage::load returns KeyInterface instance or throws an exception.
