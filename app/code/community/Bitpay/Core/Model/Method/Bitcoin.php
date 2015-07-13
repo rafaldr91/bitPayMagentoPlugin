@@ -322,7 +322,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
             $address = $quote->getBillingAddress();
         }
         
-        if (!empty($address->getStreet1())) {
+        if (!$this->is_empty($address->getStreet1())) {
             $buyer->setAddress(
                 array(
                     $address->getStreet1(),
@@ -333,35 +333,45 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
                 );
         }
 
-        if (!empty($address->getRegionCode())) {
+        if (!$this->is_empty($address->getRegionCode())) {
             $buyer->setState($address->getRegionCode());
-        } else if (!empty($address->getRegion())) {
+        } else if (!$this->is_empty($address->getRegion())) {
             $buyer->setState($address->getRegion());
         }
 
-        if (!empty($address->getCountry())) {
+        if (!$this->is_empty($address->getCountry())) {
             $buyer->setCountry($address->getCountry());
         }
 
-        if (!empty($address->getCity())) {
+        if (!$this->is_empty($address->getCity())) {
             $buyer->setCity($address->getCity());
         }
 
-        if (!empty($address->getPostcode())) {
+        if (!$this->is_empty($address->getPostcode())) {
             $buyer->setZip($address->getPostcode());
         }
 
-        if (!empty($address->getEmail())) {
+        if (!$this->is_empty($address->getEmail())) {
             $buyer->setEmail($address->getEmail());
         }
         
-        if (!empty($address->getTelephone())) {
+        if (!$this->is_empty($address->getTelephone())) {
             $buyer->setPhone($address->getTelephone());
         }
 
         $invoice->setBuyer($buyer);
 
         return $invoice;
+    }
+
+    /**
+     * Checks if string is empty - fix for PHP 5.4
+     *
+     * @param $str
+     * @return boolean
+     */
+    private function is_empty($str){
+        return empty($str);
     }
 
     /**
