@@ -38,7 +38,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
     public function authorize(Varien_Object $payment, $amount, $iframe = false)
     {
         // Check if coming from iframe or submit button
-        if ((!Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === false) 
+        if ((!Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === false)
             || (Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === true)) {
             $quoteId = $payment->getOrder()->getQuoteId();
             $ipn     = Mage::getModel('bitpay/ipn');
@@ -62,7 +62,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
 
         // Create BitPay Invoice
         $invoice = $this->initializeInvoice();
-        
+
         if (false === isset($invoice) || true === empty($invoice)) {
             $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): could not initialize invoice.');
             throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): could not initialize invoice.');
@@ -219,7 +219,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
         $this->debugData('[INFO] In Bitpay_Core_Model_Method_Bitcoin::getOrderPlaceRedirectUrl(): $_redirectUrl is ' . self::$_redirectUrl);
 
         return self::$_redirectUrl;
-        
+
     }
 
     /**
@@ -395,7 +395,7 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
             throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::addCurrencyInfo(): could not construct new BitPay currency object.');
         }
 
-        $currency->setCode($order->getBaseCurrencyCode());
+        $currency->setCode($order->getOrderCurrencyCode());
         $invoice->setCurrency($currency);
 
         return $invoice;
