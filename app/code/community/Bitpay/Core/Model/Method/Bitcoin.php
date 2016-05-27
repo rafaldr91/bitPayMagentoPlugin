@@ -37,6 +37,15 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
      */
     public function authorize(Varien_Object $payment, $amount, $iframe = false)
     {
+        if (false === isset($payment) || false === isset($amount) || true === empty($payment) || true === empty($amount)) {
+            $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
+            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
+        }
+
+        if ($iframe === false) {
+            $amount = $payment->getOrder()->getQuote()->getGrandTotal();
+        }
+
         // Check if coming from iframe or submit button
         if ((!Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === false)
             || (Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === true)) {
@@ -51,11 +60,6 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
             }
 
             return $this;
-        }
-
-        if (false === isset($payment) || false === isset($amount) || true === empty($payment) || true === empty($amount)) {
-            $this->debugData('[ERROR] In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
-            throw new \Exception('In Bitpay_Core_Model_Method_Bitcoin::authorize(): missing payment or amount parameters.');
         }
 
         $this->debugData('[INFO] Bitpay_Core_Model_Method_Bitcoin::authorize(): authorizing new order.');
