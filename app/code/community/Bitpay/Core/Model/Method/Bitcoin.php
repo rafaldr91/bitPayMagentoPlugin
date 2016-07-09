@@ -46,19 +46,11 @@ class Bitpay_Core_Model_Method_Bitcoin extends Mage_Payment_Model_Method_Abstrac
             $amount = $payment->getOrder()->getQuote()->getGrandTotal();
         }
 
-        // Check if coming from iframe or submit button
+        // This means that this authorize method was called from a Magento checkout controller
+        // and not the iframe.phtml template while this plugin is in non-redirected checkout mode,
+        // therefore we shouldn't create a new invoice, we should just return the model
         if ((!Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === false)
             || (Mage::getStoreConfig('payment/bitpay/fullscreen') && $iframe === true)) {
-            $quoteId = $payment->getOrder()->getQuoteId();
-            $ipn     = Mage::getModel('bitpay/ipn');
-
-            if (!$ipn->GetQuotePaid($quoteId))
-            {
-                // This is the error that is displayed to the customer during checkout.
-                Mage::throwException("Order not paid for.  Please pay first and then Place your Order.");
-                Mage::log('Order not paid for. Please pay first and then Place Your Order.', Zend_Log::CRIT, Mage::helper('bitpay')->getLogFile());
-            }
-
             return $this;
         }
 
