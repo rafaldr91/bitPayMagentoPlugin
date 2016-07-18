@@ -1,5 +1,12 @@
 Unreleased
 
+2.1.12
+	iFrame order will create order
+2.1.11
+	Repaired redirected checkout invoice amount calculation
+2.1.10
+	Fixed currency issue
+
 2.1.9
 	Fixed code incompatible with PHP 5.4
 
