@@ -1,5 +1,3 @@
-'use-strict'
-
 var mysql = require('mysql');
 var format = require('string-template');
 var query = 'select * from bitpay_invoices where quote_id=(select MAX(quote_id) from bitpay_invoices)';
@@ -58,7 +56,7 @@ function processRows(err, rows, fields) {
   }
   data.buyerFields = {};
   data.url = 'https://test.bitpay.com:443/invoice?id=' + rows[0].id;
-  data.posData = '{\"quoteId\":\"' + rows[0].quote_id.toString() + '\"}';
+  data.posData = '{\"orderId\":\"' + rows[0].order_id.toString() + '\"}';
   data.btcPaid = data.btcPrice;
   data.btcDue = '0.000000';
   var jsonPayload = JSON.stringify(data);
