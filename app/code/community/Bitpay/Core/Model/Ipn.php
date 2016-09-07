@@ -38,6 +38,12 @@ class Bitpay_Core_Model_Ipn extends Mage_Core_Model_Abstract
 
 
         $orderId = $order->getIncrementId();
+
+        if (false === isset($orderId) || true === empty($orderId)) {
+            \Mage::helper('bitpay')->debugData('[DEBUG] Bitpay_Core_Model_Ipn::GetStatusReceived(), orderId not found for quoteId' . $quoteId);
+            return false;
+        }
+
         $collection = $this->getCollection();
 
         foreach ($collection as $i)
