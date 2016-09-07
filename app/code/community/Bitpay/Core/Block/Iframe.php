@@ -23,7 +23,6 @@ class Bitpay_Core_Block_Iframe extends Mage_Checkout_Block_Onepage_Payment
     public function getIframeUrl()
     {
 
-	//by this time, we MUST have an order already created
         if (!($quote = Mage::getSingleton('checkout/session')->getQuote()) 
             or !($payment = $quote->getPayment())
             or !($paymentMethod = $payment->getMethod())
