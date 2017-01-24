@@ -101,10 +101,10 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
         }
 
         // Does the status match?
-        if ($invoice->getStatus() != $ipn->status) {
+       /* if ($invoice->getStatus() != $ipn->status) {
             \Mage::getModel('bitpay/method_bitcoin')->debugData('[ERROR] In Bitpay_Core_IpnController::indexAction(), IPN status and status from BitPay are different. Rejecting this IPN!');
             \Mage::throwException('There was an error processing the IPN - statuses are different. Rejecting this IPN!');
-        }
+        }*/
 
         // Does the price match?
         if ($invoice->getPrice() != $ipn->price) {
@@ -114,8 +114,8 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
 
         // Update the order to notifiy that it has been paid
         $transactionSpeed = \Mage::getStoreConfig('payment/bitpay/speed');
-        if ($invoice->getStatus() === 'paid' 
-            || ($invoice->getStatus() === 'confirmed' && $transactionSpeed === 'high')) {
+        if ($ipn->status === 'paid' 
+            || ($ipn->status === 'confirmed' && $transactionSpeed === 'high')) {
 
             $payment = \Mage::getModel('sales/order_payment')->setOrder($order);
 
