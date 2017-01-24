@@ -4,72 +4,83 @@
  * @see https://github.com/bitpay/magento-plugin/blob/master/LICENSE
  */
 
-class Bitpay_Core_Model_Observer
-{
-    /*
-     * TODO: Why is this here?
-     */
-    public function checkForRequest($observer)
-    {
-    }
+class Bitpay_Core_Model_Observer {
 
-    /*
-     * Queries BitPay to update the order states in magento to make sure that
-     * open orders are closed/canceled if the BitPay invoice expires or becomes
-     * invalid.
-     */
-    public function updateOrderStates()
-    {
-        $apiKey = \Mage::getStoreConfig('payment/bitpay/api_key');
+	public function implementOrderStatus($e) {
+		$order = $e -> getOrder();
+		$paymentCode = $order -> getPayment() -> getMethodInstance() -> getCode();
+		Mage::log('sales_order_place_after--------------:');
+		Mage::log('$paymentCode:' . $paymentCode);
+		if ($paymentCode == 'bitpay') {
+			$order -> setState(Mage_Sales_Model_Order::STATE_NEW, true);
+			$order -> save();
+		}
 
-        if (false === isset($apiKey) || empty($apiKey)) {
-            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not start job to update the order states because the API key was not set.');
-            return;
-        } else {
-            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() started job to query BitPay to update the existing order states.');
-        }
+		//	Mage::log('$order = $event->getOrder();' . $order -> getState());
+	}
 
-        /*
-         * Get all of the orders that are open and have not received an IPN for
-         * complete, expired, or invalid.
-         */
-        $orders = \Mage::getModel('bitpay/ipn')->getOpenOrders();
+	/*
+	 * TODO: Why is this here?
+	 */
+	public function checkForRequest($observer) {
+	}
 
-        if (false === isset($orders) || empty($orders)) {
-            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not retrieve the open orders.');
-            return;
-        } else {
-            \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() successfully retrieved existing open orders.');
-        }
+	/*
+	 * Queries BitPay to update the order states in magento to make sure that
+	 * open orders are closed/canceled if the BitPay invoice expires or becomes
+	 * invalid.
+	 */
+	public function updateOrderStates() {
+		$apiKey = \Mage::getStoreConfig('payment/bitpay/api_key');
 
-        /*
-         * Get all orders that have been paid using bitpay and
-         * are not complete/closed/etc
-         */
-        foreach ($orders as $order) {
-            /*
-             * Query BitPay with the invoice ID to get the status. We must take
-             * care not to anger the API limiting gods and disable our access
-             * to the API.
-             */
-            $status = null;
+		if (false === isset($apiKey) || empty($apiKey)) {
+			\Mage::helper('bitpay') -> debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not start job to update the order states because the API key was not set.');
+			return;
+		} else {
+			\Mage::helper('bitpay') -> debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() started job to query BitPay to update the existing order states.');
+		}
 
-            // TODO:
-            // Does the order need to be updated?
-            // Yes? Update Order Status
-            // No? continue
-        }
+		/*
+		 * Get all of the orders that are open and have not received an IPN for
+		 * complete, expired, or invalid.
+		 */
+		$orders = \Mage::getModel('bitpay/ipn') -> getOpenOrders();
 
-        \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() order status update job finished.');
-    }
+		if (false === isset($orders) || empty($orders)) {
+			\Mage::helper('bitpay') -> debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() could not retrieve the open orders.');
+			return;
+		} else {
+			\Mage::helper('bitpay') -> debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() successfully retrieved existing open orders.');
+		}
 
-    /**
-     * Method that is called via the magento cron to update orders if the
-     * invoice has expired
-     */
-    public function cleanExpired()
-    {
-        \Mage::helper('bitpay')->debugData('[INFO] Bitpay_Core_Model_Observer::cleanExpired() called.');
-        \Mage::helper('bitpay')->cleanExpired();
-    }
+		/*
+		 * Get all orders that have been paid using bitpay and
+		 * are not complete/closed/etc
+		 */
+		foreach ($orders as $order) {
+			/*
+			 * Query BitPay with the invoice ID to get the status. We must take
+			 * care not to anger the API limiting gods and disable our access
+			 * to the API.
+			 */
+			$status = null;
+
+			// TODO:
+			// Does the order need to be updated?
+			// Yes? Update Order Status
+			// No? continue
+		}
+
+		\Mage::helper('bitpay') -> debugData('[INFO] Bitpay_Core_Model_Observer::updateOrderStates() order status update job finished.');
+	}
+
+	/**
+	 * Method that is called via the magento cron to update orders if the
+	 * invoice has expired
+	 */
+	public function cleanExpired() {
+		\Mage::helper('bitpay') -> debugData('[INFO] Bitpay_Core_Model_Observer::cleanExpired() called.');
+		\Mage::helper('bitpay') -> cleanExpired();
+	}
+
 }
