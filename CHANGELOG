@@ -1,3 +1,5 @@
+2.1.16
+        Fixed creating after payment a second invoice in database instead of update invoice issue
 2.1.14
 	Use Magento shop base currency to create a BitPay invoice (instead of the shopper's selected currency)
 2.1.13

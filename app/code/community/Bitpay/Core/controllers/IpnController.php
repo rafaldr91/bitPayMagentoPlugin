@@ -116,13 +116,15 @@ class Bitpay_Core_IpnController extends Mage_Core_Controller_Front_Action
         $transactionSpeed = \Mage::getStoreConfig('payment/bitpay/speed');
         if ($ipn->status === 'paid' 
             || ($ipn->status === 'confirmed' && $transactionSpeed === 'high')) {
-
-            $payment = \Mage::getModel('sales/order_payment')->setOrder($order);
-
-            if (true === isset($payment) && false === empty($payment)) {
-                $payment->registerCaptureNotification($invoice->getPrice());
-                $order->addPayment($payment);
-
+            
+            if ($payments = $order->getPaymentsCollection())
+            {
+                $payment = count($payments->getItems())>0 ? end($payments->getItems()) : \Mage::getModel('sales/order_payment')->setOrder($order);
+            }
+            
+            if (true === isset($payment) && false === empty($payment)) {                    
+                $payment->registerCaptureNotification($invoice->getPrice());                  
+                $order->setPayment($payment);   
                 // If the customer has not already been notified by email
                 // send the notification now that there's a new order.
                 if (!$order->getEmailSent()) {
